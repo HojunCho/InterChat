@@ -1,5 +1,11 @@
 @CHARSET "EUC-KR";
 
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 html {
 	height: 100%;
 }
@@ -10,6 +16,16 @@ body {
 
 #container {
 	height: 100%;
+}
+
+#content {
+	position: relative;
+	float: left;
+	width: calc(100% - 4.3in);
+	height: 100%;
+	overflow: scroll;
+	dragable: false;
+	background-color: gray;
 }
 
 #div_chat_box {

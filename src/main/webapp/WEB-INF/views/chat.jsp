@@ -1,17 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 	<title>InterChat</title>
-	<link rel="stylesheet" href="resources/css/chat.css" type="text/css">
+	<script> var server_ip = "${server_ip}"; </script>
 	<script src="resources/js/chat.js"></script>
+	<link rel="stylesheet" href="resources/css/chat.css" type="text/css">
+	<script src="resources/js/${content}.js"></script>
 </head>
 <body>
 	<div id="container">
+		<!-- Interacting Contents -->
 		<div id="content">
 		</div>
+		
+		<!-- Chat Box -->
 		<div id="div_chat_box">
 			<div id="div_chat_content">
 			</div>
