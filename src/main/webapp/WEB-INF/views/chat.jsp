@@ -4,6 +4,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=0"> 
 	<title>InterChat</title>
 	<script> var server_ip = "${server_ip}"; </script>
 	<script src="resources/js/chat.js"></script>

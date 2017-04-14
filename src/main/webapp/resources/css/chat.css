@@ -1,43 +1,70 @@
 @CHARSET "EUC-KR";
 
-* {
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-}
-
 html {
-	height: 100%;
+	height: calc(100% - 20px);
 }
 
 body {
-	height: calc(100% - 30px);
+	height: 100%;
 }
 
 #container {
+	width: 100%;
 	height: 100%;
 }
 
 #content {
 	position: relative;
 	float: left;
+
 	width: calc(100% - 4.3in);
 	height: 100%;
-	overflow: scroll;
+
+	overflow: hidden;
 	dragable: false;
 	background-color: gray;
 }
 
 #div_chat_box {
 	position: relative;
-	float: right;
+	float: left;
+
 	width: 4in;
-	max-width: 100%;
 	height: 100%;
+	margin-left: 10px;
+	margin-top: 0px;
 	
 	border-style: solid;
 	border-width: 1px;
-	margin: 5px 5px 5px 5px;
+}
+
+@media only screen and (max-width: 13in) {
+	#content {
+		width: 100%;
+		height: calc(100% - 2in);
+	}
+	
+	#div_chat_box {
+		width: 100%;
+		height: 1.8in;
+		margin-left: 0px;
+		margin-top: 10px;
+	}    
+}
+
+@media only screen and (max-height: 5in) {
+	#content {
+		width: 100%;
+		height: 0;
+		visibility: hidden;
+	}
+	
+	#div_chat_box {
+		width: 100%;
+		height: 100%;
+		margin-left: 0px;
+		margin-top: 0px;
+	}  
 }
 
 #div_chat_content {
@@ -48,6 +75,7 @@ body {
 	height: calc(100% - 3rem);
 	border-style: solid;
 	border-width: 1px;
+	overflow-y: auto;
 }
 
 #div_chat_input {

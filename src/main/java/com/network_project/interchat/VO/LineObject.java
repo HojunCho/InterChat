@@ -1,40 +1,40 @@
 package com.network_project.interchat.VO;
 
 public class LineObject {
-	private int prevx;
-	private int prevy;
-	private int currx;
-	private int curry;
+	private int prevX;
+	private int prevY;
+	private int currX;
+	private int currY;
 	
-	public int getPrevx() {
-		return prevx;
+	public int getPrevX() {
+		return prevX;
 	}
 	
-	public void setPrevx(int _prevx) {
-		prevx = _prevx;
+	public void setPrevX(int _prevX) {
+		prevX = _prevX;
 	}
 	
-	public int getPrevy() {
-		return prevy;
+	public int getPrevY() {
+		return prevY;
 	}
 	
-	public void setPrevy(int _prevy) {
-		prevy = _prevy;
+	public void setPrevY(int _prevY) {
+		prevY = _prevY;
 	}
 	
-	public int getCurrx() {
-		return currx;
+	public int getCurrX() {
+		return currX;
 	}
 	
-	public void setCurrx(int _currx) {
-		currx = _currx;
+	public void setCurrX(int _currX) {
+		currX = _currX;
 	}
 	
-	public int getCurry() {
-		return curry;
+	public int getCurrY() {
+		return currY;
 	}
 	
-	public void setCurry(int _curry) {
-		curry = _curry;
+	public void setCurrY(int _currY) {
+		currY = _currY;
 	}
 }
