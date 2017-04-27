@@ -43,6 +43,8 @@ public class HomeController {
 	@RequestMapping(value = "/drawing", method = RequestMethod.GET)
 	public String drawingView(Locale locale, Model model) {
 		model.addAttribute("server_ip", server_ip.getHostAddress());
+		int a = 1;
+		a++;
 		return "drawing";
 	}	
 }
