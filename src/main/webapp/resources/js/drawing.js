@@ -2,35 +2,17 @@
  * 
  */
 
-var content;
 var canvas, ctx;
 var canvas_rect;
 var drawing = false;
 var prevX = 0, prevY = 0, currX = 0, currY = 0;
-var xScale = 1.0, yScale = 1.0;
-
-var beforeOnload = window.onload;
+var scale = 1.0;
 
 var wsDrawingUri = "ws://" + server_ip + ":8000/interchat/websocket/drawing.do";
 var drawing_websocket;
 
 window.onload = function() {
-	beforeOnload();
-	canvas = document.createElement("CANVAS");
-	content = document.getElementById("content");
-	content.appendChild(canvas);
-	canvas.width = "800";
-	canvas.height = "600";
-	
-	canvas.style.cursor = "crosshair";
-	
-	canvas.style.maxWidth = "calc(100% - 20px)";
-	canvas.style.maxHeight = "calc(100% - 20px)";
-	canvas.style.position = "relative";
-	canvas.style.margin = "10px";
-	canvas.style.dragable = "false";
-	canvas.style.backgroundColor = "white";
-    canvas.style.boxShadow = "5px 5px 8px #333333";
+	canvas = document.getElementById("canvas");
 	
 	ctx = canvas.getContext("2d");
 	canvas.addEventListener("mousemove", e => mouseEvent("mousemove", e));
@@ -53,24 +35,29 @@ window.onload = function() {
 		var data = JSON.parse(evt.data);
 		draw(data.prevX, data.prevY, data.currX, data.currY);
 	}
-	drawing_websocket.onerror = function (evt) {
-		chat_window.innerHTML += "Connection error. Please refresh the page. <br />";
-	}
-	drawing_websocket.onclose = function (evt) {
-		chat_window.innerHTML += "Connection closed. Please refresh the page. <br />";
-	}
 	setInterval(drawingHeartBeat, 9000);
 }
 
 function resizeCanvas() {
+	if (canvas.clientWidth == 0 || canvas.clientHeight == 0)
+		return;
+	
 	if (canvas.clientWidth < canvas.width || canvas.clientHeight < canvas.height) {
+		let xScale = 1.0;
+		let yScale = 1.0;
+
 		xScale = canvas.width / canvas.clientWidth;
 		yScale = canvas.height / canvas.clientHeight;
+		
+		scale = xScale > yScale ? xScale : yScale;
+		
+		if (scale == xScale)
+			canvas.style.width = canvas.clientWidth * canvas.height / canvas.width;
+		else
+			canvas.style.height = canvas.clientHeight * canvas.width / canvas.height;
 	}
-	else {
-		xScale = 1.0;
-		yScale = 1.0;
-	}
+	else
+		scale = 1.0;
 }
 
 function sendDraw(prevX, prevY, currX, currY) {
@@ -106,8 +93,8 @@ function draw(prevX, prevY, currX, currY) {
 
 function mouseEvent(e_name, e) {
 	if (e_name == "mousedown") {
-		currX = Math.round((e.clientX - canvas_rect.left + content.scrollLeft) * xScale);
-		currY = Math.round((e.clientY - canvas_rect.top + content.scrollTop) * yScale);
+		currX = Math.round((e.clientX - canvas_rect.left) * scale);
+		currY = Math.round((e.clientY - canvas_rect.top) * scale);
 		prevX = currX;
 		prevY = currY;
 		
@@ -119,8 +106,8 @@ function mouseEvent(e_name, e) {
 			return;
 		prevX = currX;
 		prevY = currY;
-		currX = Math.round((e.clientX - canvas_rect.left + content.scrollLeft) * xScale);
-		currY = Math.round((e.clientY - canvas_rect.top + content.scrollTop) * yScale);
+		currX = Math.round((e.clientX - canvas_rect.left) * scale);
+		currY = Math.round((e.clientY - canvas_rect.top) * scale);
 		sendDraw(prevX, prevY, currX, currY);
 	}
 	else if (e_name == "mouseup" || e_name == "mouseleave") {

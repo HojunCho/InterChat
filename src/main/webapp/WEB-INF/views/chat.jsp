@@ -9,13 +9,11 @@
 	<script> var server_ip = "${server_ip}"; </script>
 	<script src="resources/js/chat.js"></script>
 	<link rel="stylesheet" href="resources/css/chat.css" type="text/css">
-	<script src="resources/js/${content}.js"></script>
 </head>
 <body>
 	<div id="container">
 		<!-- Interacting Contents -->
-		<div id="content">
-		</div>
+		<iframe id="content" src="http://${server_ip}:8000/interchat/${content}"></iframe>
 		
 		<!-- Chat Box -->
 		<div id="div_chat_box">

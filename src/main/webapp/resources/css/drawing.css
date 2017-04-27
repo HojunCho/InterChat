@@ -1,0 +1,21 @@
+@CHARSET "EUC-KR";
+
+html {
+	height: calc(100% - 20px);
+}
+
+body {
+	height: 100%;
+	background-color: gray;
+}
+
+canvas {
+	cursor: crosshair;
+	
+	max-width: calc(100% - 10px);
+	max-height: calc(100% - 20px);
+	position: relative;
+	margin: 5px;
+	background-color: white;
+    box-shadow: 5px 5px 8px #333333;
+}

@@ -18,11 +18,7 @@ body {
 	float: left;
 
 	width: calc(100% - 4.3in);
-	height: 100%;
-
-	overflow: hidden;
-	dragable: false;
-	background-color: gray;
+	height: 100%;	
 }
 
 #div_chat_box {
@@ -38,7 +34,7 @@ body {
 	border-width: 1px;
 }
 
-@media only screen and (max-width: 13in) {
+@media only screen and (max-width: 10in) {
 	#content {
 		width: 100%;
 		height: calc(100% - 2in);
@@ -49,10 +45,12 @@ body {
 		height: 1.8in;
 		margin-left: 0px;
 		margin-top: 10px;
-	}    
+	}
+	    
+
 }
 
-@media only screen and (max-height: 5in) {
+@media only screen and (max-width: 10in) and (max-height: 5in) {
 	#content {
 		width: 100%;
 		height: 0;
