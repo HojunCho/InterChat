@@ -2,7 +2,7 @@
  * 
  */
 
-var wsChatUri = "ws://" + server_ip + ":8000/interchat/websocket/chat.do";
+var wsChatUri = "ws://" + server_ip + ":" + server_port + "/interchat/websocket/chat.do";
 var chat_websocket;
 var chat_window;
 var chat_input;
@@ -11,10 +11,15 @@ window.onload = function() {
 	chat_window = document.getElementById('div_chat_content');
 	chat_input = document.getElementById('chat_cnt');
 	chat_websocket = new WebSocket (wsChatUri);
-	chat_websocket.onmessage = function (evt) {
-		var chat = JSON.parse(evt.data);
-		receiveChat(chat);
+
+	chat_websocket.onopen = function (evt) {
+		chat_websocket.onmessage = function (evt) {
+			var chat = JSON.parse(evt.data);
+			receiveChat(chat);
+		}
+		chat_websocket.send(room_id);
 	}
+	
 	chat_websocket.onerror = function (evt) {
 		chat_window.innerHTML += "Connection error. Please refresh the page. <br />";
 	}
@@ -33,8 +38,9 @@ function receiveChat(chat) {
 }
 
 function sendChat() {
-	chat_websocket.send(chat_input.value);
+	var chat = {"user" : sessionStorage.user_code, "content" : chat_input.value};
 	chat_input.value = "";
+	chat_websocket.send(JSON.stringify(chat));
 }
 
 function heartBeat() {
