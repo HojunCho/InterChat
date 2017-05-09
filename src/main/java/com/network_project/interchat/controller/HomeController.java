@@ -35,14 +35,14 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		model.addAttribute("server_ip", server_ip.getHostAddress());
+		model.addAttribute("server_ip", /*server_ip.getHostAddress()*/ "localhost");
 		model.addAttribute("content", "drawing");
 		return "chat";
 	}
 	
 	@RequestMapping(value = "/drawing", method = RequestMethod.GET)
 	public String drawingView(Locale locale, Model model) {
-		model.addAttribute("server_ip", server_ip.getHostAddress());
+		model.addAttribute("server_ip", /*server_ip.getHostAddress()*/ "localhost");
 		int a = 1;
 		a++;
 		return "drawing";

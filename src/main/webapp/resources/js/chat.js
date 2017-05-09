@@ -2,7 +2,7 @@
  * 
  */
 
-var wsChatUri = "ws://" + server_ip + ":8000/interchat/websocket/chat.do";
+var wsChatUri = "ws://" + server_ip + ":8080/interchat/websocket/chat.do";
 var chat_websocket;
 var chat_window;
 var chat_input;

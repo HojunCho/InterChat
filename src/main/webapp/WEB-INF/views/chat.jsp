@@ -13,7 +13,7 @@
 <body>
 	<div id="container">
 		<!-- Interacting Contents -->
-		<iframe id="content" src="http://${server_ip}:8000/interchat/${content}"></iframe>
+		<iframe id="content" src="http://${server_ip}:8080/interchat/${content}"></iframe>
 		
 		<!-- Chat Box -->
 		<div id="div_chat_box">

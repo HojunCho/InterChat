@@ -6,6 +6,8 @@ public class LineObject {
 	private int currX;
 	private int currY;
 	
+	private String color;
+	
 	public int getPrevX() {
 		return prevX;
 	}
@@ -36,5 +38,12 @@ public class LineObject {
 	
 	public void setCurrY(int _currY) {
 		currY = _currY;
+	}
+	public String getColor() {
+		return color;
+	}
+	
+	public void setColor(String _color) {
+		color = _color;
 	}
 }
