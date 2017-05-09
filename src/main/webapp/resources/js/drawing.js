@@ -8,7 +8,7 @@ var drawing = false;
 var prevX = 0, prevY = 0, currX = 0, currY = 0;
 var scale = 1.0;
 
-var wsDrawingUri = "ws://" + server_ip + ":8000/interchat/websocket/drawing.do";
+var wsDrawingUri = "ws://" + server_ip + ":8080/interchat/websocket/drawing.do";
 var drawing_websocket;
 
 window.onload = function() {

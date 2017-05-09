@@ -26,7 +26,7 @@ public class ChatHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		super.afterConnectionEstablished(session);
-		logger.info("낯선 사람" + user_num + " 접속");
+		//logger.info("낯선 사람" + user_num + " 접속");
 		ChatObject chat = new ChatObject();
 		chat.setUser("Admin");
 		chat.setContent("낯선 사람" + user_num + "님이 들어왔습니다.");
@@ -46,13 +46,14 @@ public class ChatHandler extends TextWebSocketHandler {
 		user_names.remove(session);
 		sendMessage(chat);
 	}
+	//(String) message.getPayload()
 
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 		super.handleMessage(session, message);
 		ChatObject chat = new ChatObject();
 		chat.setUser(user_names.get(session));
-		chat.setContent((String) message.getPayload());
+		chat.setContent((String) message.getPayload()); 
 		if (chat.getContent().compareTo("NULL") == 0)
 			return;
 		sendMessage(chat);

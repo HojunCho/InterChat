@@ -1,22 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+    pageEncoding="EUC-KR" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=0"> 
 	<title>InterChat</title>
-	<script> var server_ip = "${server_ip}"; </script>
+	<script> var server_ip = "${server_ip}";</script>
+	<script> var username = "${name}";</script>
 	<script src="resources/js/chat.js"></script>
 	<link rel="stylesheet" href="resources/css/chat.css" type="text/css">
 </head>
 <body>
 	<div id="container">
 		<!-- Interacting Contents -->
-		<iframe id="content" src="http://${server_ip}:8000/interchat/${content}"></iframe>
+		<iframe id="content" src="http://${server_ip}:8080/interchat/${content}"></iframe>
 		
 		<!-- Chat Box -->
-		<div id="div_chat_box">
+		<div id="div_chat_box"> <!-- Parent of div_chat_content -->
 			<div id="div_chat_content">
 			</div>
 			<div id="div_chat_input">

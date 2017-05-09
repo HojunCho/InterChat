@@ -8,8 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.network_project.interchat.VO.LoginObject;
 
 /**
  * Handles requests for the application home page.
@@ -32,17 +37,28 @@ public class HomeController {
 			return null;
 		}
 	}
+	@RequestMapping(value ="/",method = RequestMethod.GET)
+	public ModelAndView login() {
+		return new ModelAndView("login","command",new LoginObject());
+	}
+	/*
+	public String LoginView(Locale locale, Model model){
+		model.addAttribute("server_ip","localhost");
+		return "login";
+	}
+	*/
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		model.addAttribute("server_ip", server_ip.getHostAddress());
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String home(@ModelAttribute("interchat")LoginObject login, ModelMap model) {
+		model.addAttribute("server_ip", /*server_ip.getHostAddress()*/ "localhost");
 		model.addAttribute("content", "drawing");
+		model.addAttribute("name",login.getName());
 		return "chat";
 	}
 	
 	@RequestMapping(value = "/drawing", method = RequestMethod.GET)
 	public String drawingView(Locale locale, Model model) {
-		model.addAttribute("server_ip", server_ip.getHostAddress());
+		model.addAttribute("server_ip", /*server_ip.getHostAddress()*/ "localhost");
 		return "drawing";
 	}	
 }
