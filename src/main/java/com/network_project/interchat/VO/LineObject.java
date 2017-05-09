@@ -1,6 +1,6 @@
 package com.network_project.interchat.VO;
 
-public class LineObject {
+public class LineObject implements InteractInterface {
 	private int prevX;
 	private int prevY;
 	private int currX;

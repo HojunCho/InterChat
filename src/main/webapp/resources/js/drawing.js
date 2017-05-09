@@ -10,8 +10,9 @@ var prevX = 0, prevY = 0, currX = 0, currY = 0;
 var color = "black";
 var lineWidth = 2;
 var scale = 1.0;
+var initImg;
 
-var wsDrawingUri = "ws://" + server_ip + ":8080/interchat/websocket/drawing.do";
+var wsDrawingUri = "ws://" + server_ip + ":" + server_port + "/interchat/websocket/drawing.do";
 var drawing_websocket;
 
 window.onload = function() {
@@ -31,27 +32,39 @@ window.onload = function() {
 	lineWidth_decre.addEventListener("click", e => buttonEvent("lineWidth_decre",e));
 	
 	canvas = document.getElementById("canvas");
+		
+	canvas.addEventListener("mousemove", function(e) { mouseEvent("mousemove", e); });
+	canvas.addEventListener("mousedown", function(e) { mouseEvent("mousedown", e); });
+	canvas.addEventListener("mouseup", function(e) { mouseEvent("mouseup", e); });
+	canvas.addEventListener("mouseleave", function(e) { mouseEvent("mouseleave", e); });
 	
+	canvas.addEventListener("touchstart", function(e) { mouseEvent("mousedown", e.changedTouches[0]); });
+	canvas.addEventListener("touchmove", function(e) { mouseEvent("mousemove", e.changedTouches[0]); });
+	canvas.addEventListener("touchend", function(e) { mouseEvent("mouseup", e.changedTouches[0]); });
+	canvas.addEventListener("touchleave", function(e) { mouseEvent("mouseleave", e.changedTouches[0]); });
+	
+	initImg = new Image();
+	initImg.onload = initWebSocket;
+	initImg.src = "/interchat/image?viewid=" + view_id;	
+}
+
+function initWebSocket() {
 	ctx = canvas.getContext("2d");
-	canvas.addEventListener("mousemove", e => mouseEvent("mousemove", e));
-	canvas.addEventListener("mousedown", e => mouseEvent("mousedown", e));
-	canvas.addEventListener("mouseup", e => mouseEvent("mouseup", e));
-	canvas.addEventListener("mouseleave", e => mouseEvent("mouseleave", e));
-	
-	canvas.addEventListener("touchstart", e => mouseEvent("mousedown", e.changedTouches[0]));
-	canvas.addEventListener("touchmove", e => mouseEvent("mousemove", e.changedTouches[0]));
-	canvas.addEventListener("touchend", e => mouseEvent("mouseup", e.changedTouches[0]));
-	canvas.addEventListener("touchleave", e => mouseEvent("mouseleave", e.changedTouches[0]));
-	
-	
+	ctx.drawImage(initImg, 0, 0);
+	canvas.style.display = "block";
 	resizeCanvas();
-	window.onresize = resizeCanvas;
+	window.onresize = resizeCanvas;		
 	canvas_rect = canvas.getBoundingClientRect();
-	
 	drawing_websocket = new WebSocket (wsDrawingUri);
-	drawing_websocket.onmessage = function (evt) {	
-		var data = JSON.parse(evt.data);
-		draw(data.prevX, data.prevY, data.currX, data.currY, color, lineWidth);
+
+	drawing_websocket.onopen = function (evt) {
+		drawing_websocket.onmessage = function (evt) {	
+			var data = JSON.parse(evt.data);
+			for(var i = 0; i < data.length; i++) {
+				draw(data[i].prevX, data[i].prevY, data[i].currX, data[i].currY, color, lineWidth);
+			}
+		}
+		drawing_websocket.send(view_id);
 	}
 	setInterval(drawingHeartBeat, 9000);
 }
@@ -104,6 +117,7 @@ function draw(prevX, prevY, currX, currY, color, lineWidth) {
 		ctx.lineTo(currX, currY);
 		ctx.strokeStyle = color;
 		ctx.lineWidth = lineWidth;
+		ctx.lineCap = "round";
 		ctx.stroke();
 		ctx.closePath();
 	}

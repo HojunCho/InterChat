@@ -6,7 +6,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=0">
 	<title>Drawing View</title>
-	<script> var server_ip = "${server_ip}"; </script>
+	<script>
+		var server_ip = "<%=request.getServerName()%>";
+		var server_port = "<%=request.getServerPort()%>";
+		var view_id = "${view_id}";
+	</script>
 	<script src="resources/js/drawing.js"></script>
 	<link rel="stylesheet" href="resources/css/drawing.css" type="text/css">
 </head>

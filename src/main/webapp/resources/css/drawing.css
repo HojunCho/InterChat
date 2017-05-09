@@ -38,4 +38,5 @@ canvas {
 	margin: 5px;
 	background-color: white;
     box-shadow: 5px 5px 8px #333333;
+    display: none;
 }

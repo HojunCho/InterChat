@@ -38,6 +38,6 @@
 		<websocket:mapping path="/websocket/drawing.do" handler="drawingHandler"/>	
 	</websocket:handlers>	
 	
-	<beans:bean id="drawingHandler" class="com.network_project.interchat.websocket.DrawingHandler"/>
+	<beans:bean id="drawingHandler" name="drawingHandler" class="com.network_project.interchat.websocket.DrawingHandler"/>
 	
 </beans:beans>

@@ -1,20 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=0"> 
 	<title>InterChat</title>
-	<script> var server_ip = "${server_ip}"; </script>
+	<script> 
+		var server_ip = "<%=request.getServerName()%>";
+		var server_port = "<%=request.getServerPort()%>";
+		var room_id = "${room_id}";
+	</script>
 	<script src="resources/js/chat.js"></script>
 	<link rel="stylesheet" href="resources/css/chat.css" type="text/css">
 </head>
 <body>
 	<div id="container">
 		<!-- Interacting Contents -->
+<<<<<<< HEAD
 		<iframe id="content" src="http://${server_ip}:8080/interchat/${content}"></iframe>
 		
+=======
+		<div id="content">
+			<c:forEach items = "${view_list}" var="view">
+				<iframe id="view_${view}" class="view" src="/interchat/view?viewid=${view}"></iframe>
+			</c:forEach>
+		</div>	
+>>>>>>> refs/remotes/origin/background
 		<!-- Chat Box -->
 		<div id="div_chat_box">
 			<div id="div_chat_content">
