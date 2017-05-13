@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.network_project.interchat.VO.LoginObject;
 import com.network_project.interchat.other.ChatRoom;
 import com.network_project.interchat.other.DrawingView;
 import com.network_project.interchat.other.View;
@@ -55,9 +58,13 @@ public class HomeController {
 			logger.error("Error in getting server IP");
 		}
 	}
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model) {
+	@RequestMapping(value ="/",method = RequestMethod.GET)
+	public ModelAndView login() {
+		return new ModelAndView("login","command",new LoginObject());
+	}
+		
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String home(Model model,HttpServletRequest request) {
 		Set<ChatRoom> room_list = general_service.getRoomList();
 		if (room_list.size() == 0) {
 			ChatRoom room = general_service.roomFactory("Inter Chat");
@@ -65,11 +72,10 @@ public class HomeController {
 			room.addView(drawing_view);
 			model.addAttribute("room_id", room.getID());
 		}
-		else
 			model.addAttribute("room_id", room_list.iterator().next().getID());
 		
-		String new_user_name = "낯선 사람" + Integer.toString(user_num++);
-		if (general_service.insertUserName(new_user_name))
+		String new_user_name = request.getParameter("user_name");//"낯선 사람" + Integer.toString(user_num++); //이것만 고려하면 된다.
+ 		if (general_service.insertUserName(new_user_name))
 			model.addAttribute("user_code", general_service.getUserCode(new_user_name));
 		else
 			throw new NotFoundException();

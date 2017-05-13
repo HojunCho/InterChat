@@ -23,7 +23,6 @@ else {
 				receiveChat(chat);
 			}
 		}
-	
 		chat_websocket.onerror = function (evt) {
 			chat_window.innerHTML += "Connection error. Please refresh the page. <br />";
 		}
