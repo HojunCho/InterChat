@@ -8,9 +8,46 @@
 	<title>Login view</title>
 	<link rel="stylesheet" href="resources/css/login.css" type="text/css">
 </head>
+<style>
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+</style>
 <body>
-	<h2>Chatting Name</h2>
-	<form method = "POST" action = "/interchat/login"> 
+	<h1 class="aav">Chatting Name</h1>
+	<div>
+		<form method = "POST" action = "/interchat/login"> 
+    <label for="fname">Name</label>
+    <input type="text" id="fname" name="user_name" placeholder="Your name..">  
+    <input type="submit" value="Submit">
+  </form>
+</div>
+		
+	<!--
 	<table>
 		<tr>
 			<td><label path = "name">Name</label></td>
@@ -22,6 +59,7 @@
 			</td>
 		</tr>
 	</table>
+	 -->
 	</form>
 </body>
 </html>
