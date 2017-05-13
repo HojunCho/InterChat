@@ -8,8 +8,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=0"> 
 	<title>InterChat</title>
 	<script> 
-		var server_ip = "<%=request.getServerName()%>";
-		var server_port = "<%=request.getServerPort()%>";
 		var room_id = "${room_id}";
 	</script>
 	<script src="resources/js/chat.js"></script>

@@ -2,31 +2,36 @@
  * 
  */
 
-var wsChatUri = "ws://" + server_ip + ":" + server_port + "/interchat/websocket/chat.do";
+var wsChatUri = "ws://" + location.host + "/interchat/websocket/chat.do";
 var chat_websocket;
 var chat_window;
 var chat_input;
 
-window.onload = function() {
-	chat_window = document.getElementById('div_chat_content');
-	chat_input = document.getElementById('chat_cnt');
-	chat_websocket = new WebSocket (wsChatUri);
+if (sessionStorage.getItem("user_code") == null)
+	window.location = "/interchat/";
+else {
+	window.onload = function() {		
+		chat_window = document.getElementById('div_chat_content');
+		chat_input = document.getElementById('chat_cnt');
+		chat_websocket = new WebSocket (wsChatUri);
 
-	chat_websocket.onopen = function (evt) {
-		chat_websocket.onmessage = function (evt) {
-			var chat = JSON.parse(evt.data);
-			receiveChat(chat);
+		chat_websocket.onopen = function (evt) {
+			
+			chat_websocket.send(JSON.stringify({userid : sessionStorage.user_code, viewid : room_id}));
+			chat_websocket.onmessage = function (evt) {
+				var chat = JSON.parse(evt.data);
+				receiveChat(chat);
+			}
 		}
-		chat_websocket.send(room_id);
-	}
 	
-	chat_websocket.onerror = function (evt) {
-		chat_window.innerHTML += "Connection error. Please refresh the page. <br />";
+		chat_websocket.onerror = function (evt) {
+			chat_window.innerHTML += "Connection error. Please refresh the page. <br />";
+		}
+		chat_websocket.onclose = function (evt) {
+			chat_window.innerHTML += "Connection closed. Please refresh the page. <br />";
+		}
+		setInterval(heartBeat, 9000);
 	}
-	chat_websocket.onclose = function (evt) {
-		chat_window.innerHTML += "Connection closed. Please refresh the page. <br />";
-	}
-	setInterval(heartBeat, 9000);
 }
 
 function receiveChat(chat) {

@@ -26,8 +26,8 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.network_project.interchat" />
-	
+	<context:component-scan base-package="com.network_project.interchat"/>
+
 	<websocket:handlers>
 		<websocket:mapping path="/websocket/chat.do" handler="chatHandler"/>	
 	</websocket:handlers>	
@@ -39,5 +39,8 @@
 	</websocket:handlers>	
 	
 	<beans:bean id="drawingHandler" name="drawingHandler" class="com.network_project.interchat.websocket.DrawingHandler"/>
-	
+
+	<context:spring-configured />
+    <context:load-time-weaver/>
+	<beans:bean id="view" class="com.network_project.interchat.other.View" abstract="true" scope="prototype"/>
 </beans:beans>

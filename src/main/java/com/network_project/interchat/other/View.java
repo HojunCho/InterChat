@@ -7,18 +7,23 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.network_project.interchat.VO.InteractInterface;
+import com.network_project.interchat.service.GeneralService;
 
+@Configurable(value="view")
 public abstract class View {
 	private static Map<String, View> view_id_map = new HashMap<String, View>();
 	private static AtomicInteger view_count = new AtomicInteger(0);
-	
+
 	private static String getNewViewID () {
 		return String.valueOf(view_count.incrementAndGet());
 	}
@@ -26,6 +31,9 @@ public abstract class View {
 	public static View getViewByID(String view_id) {
 		return view_id_map.get(view_id);
 	}
+
+	@Resource(name="GeneralService")
+	protected GeneralService general_service;
 	
 	private ChatRoom parent;
 	private final String view_id = getNewViewID();
@@ -60,13 +68,13 @@ public abstract class View {
 		return view_name;
 	}
 	
-	final public void sessionIn(WebSocketSession session) {
+	public void sessionIn(WebSocketSession session) {
 		if (sessions.isEmpty())
 			parent.increaseLiveView();
 		sessions.add(session);
 	}
 	
-	final public void sessionOut(WebSocketSession session) {
+	public void sessionOut(WebSocketSession session) {
 		sessions.remove(session);
 		if (sessions.isEmpty())
 			parent.decreaseLiveView();

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.network_project.interchat.other.ChatRoom;
 import com.network_project.interchat.other.DrawingView;
@@ -34,6 +34,11 @@ import com.network_project.interchat.service.GeneralService;
 @Controller
 public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+
+	@ResponseStatus(value=HttpStatus.NOT_FOUND)  // 404
+	public class NotFoundException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+	}	
 
 	@Resource(name="GeneralService")
 	private GeneralService general_service;
@@ -67,7 +72,7 @@ public class HomeController {
 		if (general_service.insertUserName(new_user_name))
 			model.addAttribute("user_code", general_service.getUserCode(new_user_name));
 		else
-			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+			throw new NotFoundException();
 		
 		return "beta";
 	}
@@ -96,7 +101,7 @@ public class HomeController {
 		if (view != null && view instanceof DrawingView)
 			return "drawing";
 		else
-			return "redirect:/";
+			throw new NotFoundException();
 	}
 	
 	@ResponseBody
@@ -126,7 +131,7 @@ public class HomeController {
 		if (general_service.insertUserName(new_user_name))
 			model.addAttribute("user_code", general_service.getUserCode(new_user_name));
 		else
-			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+			throw new NotFoundException();
 		
 		return "beta";
 	}

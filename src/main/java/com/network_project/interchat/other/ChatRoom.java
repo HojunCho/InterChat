@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.network_project.interchat.VO.ChatObject;
 import com.network_project.interchat.VO.InteractInterface;
 
 public class ChatRoom extends View {
@@ -24,7 +25,7 @@ public class ChatRoom extends View {
 	public static Set<ChatRoom> getRoomList() {
 		return room_list;
 	}
-
+	
 	private List<View> views = new ArrayList<View>();
 	private AtomicInteger left_view = new AtomicInteger();
 	private AtomicReference<Timer> timer = new AtomicReference<Timer>(null);
@@ -38,7 +39,7 @@ public class ChatRoom extends View {
 		}
 		logger.info("Room \"{}\" is initialized", getName());
 		timer.set(new Timer());
-		timer.get().schedule(new RoomChecker(), 5000);
+		timer.get().schedule(new RoomChecker(), 10000);
 	}
 	
 	public void addView(View view) {
@@ -60,7 +61,7 @@ public class ChatRoom extends View {
 		Timer old = timer.getAndSet(new Timer());
 		if (old != null)
 			old.cancel();
-		timer.get().schedule(new RoomChecker(), 5000);
+		timer.get().schedule(new RoomChecker(), 10000);
 	}
 	
 	private void invalidateRoom() {
@@ -84,6 +85,26 @@ public class ChatRoom extends View {
 	@Override
 	public void interact(WebSocketSession session, InteractInterface obj) {
 		send(obj);
+	}
+	
+	@Override
+	public void sessionIn(WebSocketSession session) {
+		super.sessionIn(session);
+		ChatObject chat = new ChatObject();
+		chat.setUser("Admin");
+		if (general_service == null)
+			System.out.println("BAD");
+		chat.setContent(general_service.getUserName(session) + "´ÔÀÌ µé¾î¿Ô½À´Ï´Ù.");
+		send(chat);
+	}
+	
+	@Override
+	public void sessionOut(WebSocketSession session) {
+		super.sessionOut(session);
+		ChatObject chat = new ChatObject();
+		chat.setUser("Admin");
+		chat.setContent(general_service.getUserName(session) + "´ÔÀÌ ³ª°¬½À´Ï´Ù.");
+		send(chat);
 	}
 	
 	private class RoomChecker extends TimerTask {
