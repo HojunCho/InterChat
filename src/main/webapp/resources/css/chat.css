@@ -1,4 +1,4 @@
-@CHARSET "EUC-KR";
+@CHARSET "UTF-8";
 
 html {
 	height: calc(100% - 20px);
@@ -19,6 +19,11 @@ body {
 
 	width: calc(100% - 4.3in);
 	height: 100%;	
+}
+
+.view {
+	width: 100%;
+	height: 100%;
 }
 
 #div_chat_box {

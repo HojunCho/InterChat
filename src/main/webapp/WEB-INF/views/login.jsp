@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=devide-width, initial-scale=1.0 user-scalable=0">
 	<title>Login view</title>
 	<link rel="stylesheet" href="resources/css/login.css" type="text/css">
@@ -14,7 +14,7 @@
 	<table>
 		<tr>
 			<td><label path = "name">Name</label></td>
-			<td ><input path = "name" /></td>
+			<td ><input path = "name" name = "user_name" /></td>
 		</tr>
 		<tr>
 			<td colspan = "2">

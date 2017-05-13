@@ -1,6 +1,6 @@
 package com.network_project.interchat.VO;
 
-public class ChatObject {
+public class ChatObject implements InteractInterface {
 	private String user;
 	private String content;
 	

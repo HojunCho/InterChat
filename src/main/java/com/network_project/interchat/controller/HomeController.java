@@ -1,40 +1,56 @@
 package com.network_project.interchat.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.network_project.interchat.VO.LoginObject;
+import com.network_project.interchat.other.ChatRoom;
+import com.network_project.interchat.other.DrawingView;
+import com.network_project.interchat.other.View;
+import com.network_project.interchat.service.GeneralService;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
 public class HomeController {
-	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	private static final InetAddress server_ip = getServerAddress();	
+
+	@Resource(name="GeneralService")
+	private GeneralService general_service;
 	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	private static InetAddress getServerAddress() {
+	private static int user_num = 0;
+	
+	@PostConstruct
+	public void constructor() {
+		InetAddress ip;
 		try {
-			logger.info("Server IP : " + InetAddress.getLocalHost().getHostAddress());
-			return InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			logger.error(e.toString());
-			return null;
+			ip = InetAddress.getLocalHost();
+			logger.info("Server IP : " + ip.getHostAddress());
+		} catch (Exception e) {
+			logger.error("Error in getting server IP");
 		}
 	}
 	@RequestMapping(value ="/",method = RequestMethod.GET)
@@ -49,16 +65,81 @@ public class HomeController {
 	*/
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String home(@ModelAttribute("interchat")LoginObject login, ModelMap model) {
-		model.addAttribute("server_ip", /*server_ip.getHostAddress()*/ "localhost");
-		model.addAttribute("content", "drawing");
-		model.addAttribute("name",login.getName());
-		return "chat";
+	public String home(Model model,HttpServletRequest request) {
+		Set<ChatRoom> room_list = general_service.getRoomList();
+		if (room_list.size() == 0) {
+			ChatRoom room = general_service.roomFactory("Inter Chat");
+			DrawingView drawing_view = new DrawingView(room, "Drawing");
+			room.addView(drawing_view);
+			model.addAttribute("room_id", room.getID());
+		}
+			model.addAttribute("room_id", room_list.iterator().next().getID());
+		
+		String new_user_name = request.getParameter("user_name");//"낯선 사람" + Integer.toString(user_num++); //이것만 고려하면 된다.
+ 		if (general_service.insertUserName(new_user_name))
+			model.addAttribute("user_code", general_service.getUserCode(new_user_name));
+		else
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+		
+		return "beta";
+	}
+
+	@RequestMapping(value = "/room", method = RequestMethod.GET)
+	public String getRoom(Model model, @RequestParam("roomid") String room_id) {
+		View view = general_service.getView(room_id);
+		if (view != null && view instanceof ChatRoom) {
+			model.addAttribute("room_id", room_id);
+			List<View> view_list= ((ChatRoom)view).getViewList();
+			List<String> view_id_list = new ArrayList<String>();
+			for (ListIterator<View> view_iter = view_list.listIterator(1); view_iter.hasNext();) 
+				view_id_list.add(view_iter.next().getID());
+			model.addAttribute("view_list", view_id_list);
+			return "chat";
+		}
+		else
+			return "redirect:/";
 	}
 	
-	@RequestMapping(value = "/drawing", method = RequestMethod.GET)
-	public String drawingView(Locale locale, Model model) {
-		model.addAttribute("server_ip", /*server_ip.getHostAddress()*/ "localhost");
-		return "drawing";
-	}	
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public String getView(Model model, @RequestParam("viewid") String view_id) {
+		model.addAttribute("view_id", view_id);
+		
+		View view = general_service.getView(view_id);
+		if (view != null && view instanceof DrawingView)
+			return "drawing";
+		else
+			return "redirect:/";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/image", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+	public byte[] getImage(@RequestParam("viewid") String view_id) {
+		try {
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			ImageIO.write(((DrawingView) general_service.getView(view_id)).getImage(), "png", stream);
+			stream.flush();
+			byte[] imageBytes =stream.toByteArray();
+			stream.close();
+			return imageBytes;
+		}
+		catch (Exception e) {
+			return new byte[0];
+		}
+	}
+	
+	@RequestMapping(value = "/beta/new", method = RequestMethod.GET)
+	public String newRoom(Model model) {
+		ChatRoom room = general_service.roomFactory("Inter Chat");
+		DrawingView drawing_view = new DrawingView(room, "Drawing");
+		room.addView(drawing_view);
+		model.addAttribute("room_id", room.getID());
+		
+		String new_user_name = "낯선 사람" + Integer.toString(user_num++);
+		if (general_service.insertUserName(new_user_name))
+			model.addAttribute("user_code", general_service.getUserCode(new_user_name));
+		else
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+		
+		return "beta";
+	}
 }
