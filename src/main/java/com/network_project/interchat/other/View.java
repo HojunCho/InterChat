@@ -1,5 +1,6 @@
 package com.network_project.interchat.other;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,6 +56,15 @@ public abstract class View {
 	}
 	
 	final protected void invalidate() {
+		if(!sessions.isEmpty()) {
+			sessions.forEach(session->{
+				try {
+					session.close();
+				} catch (IOException e) {
+					logger.error(e.getMessage());
+				}
+			});
+		}
 		view_id_map.remove(view_id);
 		parent = null;
 		logger.info("Invalidated View {}", view_id);

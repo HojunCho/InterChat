@@ -8,7 +8,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=0"> 
 	<title>InterChat</title>
 	<script> 
-		var room_id = "${room_id}";
+		var room_id = "${roomid}";
+		var user_code = "${sessionScope.user_code}";
 	</script>
 	<script src="resources/js/chat.js"></script>
 	<link rel="stylesheet" href="resources/css/chat.css" type="text/css">
@@ -18,7 +19,7 @@
 		<!-- Interacting Contents -->
 		<div id="content">
 			<c:forEach items = "${view_list}" var="view">
-				<iframe id="view_${view}" class="view" src="/interchat/view?viewid=${view}"></iframe>
+				<iframe id="view_${view}" class="view" src="view?viewid=${view}"></iframe>
 			</c:forEach>
 		</div>	
 		<!-- Chat Box -->

@@ -24,6 +24,8 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
+	<!-- Encoding Filter -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>
@@ -45,6 +47,6 @@
 		
 	</servlet-mapping>
 	<session-config>
-		<session-timeout>1440</session-timeout>
+		<session-timeout>60</session-timeout>
 	</session-config>	
 </web-app>

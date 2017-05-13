@@ -8,6 +8,7 @@
 	<title>Drawing View</title>
 	<script>
 		var view_id = "${view_id}";
+		var user_code = "${sessionScope.user_code}";
 	</script>
 	<script src="resources/js/drawing.js"></script>
 	<link rel="stylesheet" href="resources/css/drawing.css" type="text/css">

@@ -11,24 +11,22 @@ var initImg;
 var wsDrawingUri = "ws://" + location.host + "/interchat/websocket/drawing.do";
 var drawing_websocket;
 
-if (sessionStorage.getItem("user_code") != null) {
-	window.onload = function() {
-		canvas = document.getElementById("canvas");
+window.onload = function() {
+	canvas = document.getElementById("canvas");
 		
-		canvas.addEventListener("mousemove", function(e) { mouseEvent("mousemove", e); });
-		canvas.addEventListener("mousedown", function(e) { mouseEvent("mousedown", e); });
-		canvas.addEventListener("mouseup", function(e) { mouseEvent("mouseup", e); });
-		canvas.addEventListener("mouseleave", function(e) { mouseEvent("mouseleave", e); });
+	canvas.addEventListener("mousemove", function(e) { mouseEvent("mousemove", e); });
+	canvas.addEventListener("mousedown", function(e) { mouseEvent("mousedown", e); });
+	canvas.addEventListener("mouseup", function(e) { mouseEvent("mouseup", e); });
+	canvas.addEventListener("mouseleave", function(e) { mouseEvent("mouseleave", e); });
 	
-		canvas.addEventListener("touchstart", function(e) { mouseEvent("mousedown", e.changedTouches[0]); });
-		canvas.addEventListener("touchmove", function(e) { mouseEvent("mousemove", e.changedTouches[0]); });
-		canvas.addEventListener("touchend", function(e) { mouseEvent("mouseup", e.changedTouches[0]); });
-		canvas.addEventListener("touchleave", function(e) { mouseEvent("mouseleave", e.changedTouches[0]); });
+	canvas.addEventListener("touchstart", function(e) { mouseEvent("mousedown", e.changedTouches[0]); });
+	canvas.addEventListener("touchmove", function(e) { mouseEvent("mousemove", e.changedTouches[0]); });
+	canvas.addEventListener("touchend", function(e) { mouseEvent("mouseup", e.changedTouches[0]); });
+	canvas.addEventListener("touchleave", function(e) { mouseEvent("mouseleave", e.changedTouches[0]); });
 	
-		initImg = new Image();
-		initImg.onload = initWebSocket;
-		initImg.src = "/interchat/image?viewid=" + view_id;	
-	}
+	initImg = new Image();
+	initImg.onload = initWebSocket;
+	initImg.src = "image?viewid=" + view_id;	
 }
 
 function initWebSocket() {
@@ -40,7 +38,7 @@ function initWebSocket() {
 	canvas_rect = canvas.getBoundingClientRect();
 	drawing_websocket = new WebSocket (wsDrawingUri);
 	drawing_websocket.onopen = function (evt) {
-		drawing_websocket.send(JSON.stringify({userid : sessionStorage.user_code, viewid : view_id}));
+		drawing_websocket.send(JSON.stringify({userid : user_code, viewid : view_id}));
 		drawing_websocket.onmessage = function (evt) {	
 			var data = JSON.parse(evt.data);
 			for(var i = 0; i < data.length; i++) {

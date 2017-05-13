@@ -26,6 +26,10 @@ public class ChatRoom extends View {
 		return room_list;
 	}
 	
+	public static void disableAllRoom() {
+		room_list.forEach(room->room.invalidateRoom());
+	}
+	
 	private List<View> views = new ArrayList<View>();
 	private AtomicInteger left_view = new AtomicInteger();
 	private AtomicReference<Timer> timer = new AtomicReference<Timer>(null);
@@ -71,6 +75,9 @@ public class ChatRoom extends View {
 		synchronized(room_list) {
 			room_list.remove(this);
 		}
+		Timer old = timer.getAndSet(null);
+		if (old != null)
+			old.cancel();
 		logger.info("Invalidated Room \"{}\"", getName());	
 	}
 	
@@ -94,7 +101,7 @@ public class ChatRoom extends View {
 		chat.setUser("Admin");
 		if (general_service == null)
 			System.out.println("BAD");
-		chat.setContent(general_service.getUserName(session) + "´ÔÀÌ µé¾î¿Ô½À´Ï´Ù.");
+		chat.setContent(general_service.getUserName(session) + "ë‹˜ì´ ë“¤ì–´ì™”ìŠµë‹ˆë‹¤.");
 		send(chat);
 	}
 	
@@ -103,7 +110,7 @@ public class ChatRoom extends View {
 		super.sessionOut(session);
 		ChatObject chat = new ChatObject();
 		chat.setUser("Admin");
-		chat.setContent(general_service.getUserName(session) + "´ÔÀÌ ³ª°¬½À´Ï´Ù.");
+		chat.setContent(general_service.getUserName(session) + "ë‹˜ì´ ë‚˜ê°”ìŠµë‹ˆë‹¤.");
 		send(chat);
 	}
 	

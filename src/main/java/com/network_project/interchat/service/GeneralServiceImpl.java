@@ -21,6 +21,7 @@ public final class GeneralServiceImpl implements GeneralService {
 	@PreDestroy
 	private void destroyer() {
 		ViewRunnableWork.shutdown();
+		ChatRoom.disableAllRoom();
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public final class GeneralServiceImpl implements GeneralService {
 	
 	@Override
 	public boolean insertUserName(String user_name) {
-		if (user_code2id.containsKey(String.valueOf(user_name.hashCode())))
+		if (user_name.compareTo("Admin") == 0)
 			return false;
 		user_code2id.put(String.valueOf(user_name.hashCode()), user_name);
 		return true;
