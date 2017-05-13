@@ -9,15 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.annotation.Resource;
 
 import org.springframework.web.socket.WebSocketSession;
 
 import com.network_project.interchat.VO.InteractInterface;
 import com.network_project.interchat.VO.LineObject;
-import com.network_project.interchat.service.GeneralService;
 
 public class DrawingView extends View {
 	private BlockingQueue<InteractInterface> drawing_queue = new LinkedBlockingQueue<InteractInterface>();

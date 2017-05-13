@@ -4,7 +4,6 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=devide-width, initial-scale=1.0 user-scalable=0">
 	<title>Login view</title>
 	<link rel="stylesheet" href="resources/css/login.css" type="text/css">
 </head>
@@ -41,25 +40,10 @@ div {
 	<h1 class="aav">Chatting Name</h1>
 	<div>
 		<form method = "POST" action = "/interchat/login"> 
-    <label for="fname">Name</label>
-    <input type="text" id="fname" name="user_name" placeholder="Your name..">  
-    <input type="submit" value="Submit">
-  </form>
-</div>
-		
-	<!--
-	<table>
-		<tr>
-			<td><label path = "name">Name</label></td>
-			<td ><input path = "name" name = "user_name" /></td>
-		</tr>
-		<tr>
-			<td colspan = "2">
-				<input type = "submit" value = "Enter"/>
-			</td>
-		</tr>
-	</table>
-	 -->
-	</form>
+    	<label for="fname">Name</label>
+    	<input type="text" id="fname" name="user_name" placeholder="Your name..">  
+    	<input type="submit" value="Submit">
+  	</form>
+	</div>
 </body>
 </html>
