@@ -7,16 +7,18 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConcurrentHashSet<T> implements Set<T> {
-	private Map<T, Object> map = new ConcurrentHashMap<T, Object>();
+	private Map<T, Boolean> map = new ConcurrentHashMap<T, Boolean>();
 
 	@Override
 	public boolean add(T e) {
-		return map.put(e, new Object()) == null;
+		return map.putIfAbsent(e, Boolean.TRUE) == null;
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		return false;
+		for (T e : c)
+            add(e);
+		return true;
 	}
 
 	@Override
@@ -31,7 +33,11 @@ public class ConcurrentHashSet<T> implements Set<T> {
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		return false;
+		for (Object o : c) {
+            if (!contains(o))
+                return false;
+        }
+        return true;
 	}
 
 	@Override
@@ -41,17 +47,37 @@ public class ConcurrentHashSet<T> implements Set<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		return null;
+		return new Iterator<T>() {
+            private Iterator<Map.Entry<T, Boolean>> iterator = map.entrySet().iterator();
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return iterator.next().getKey();
+            }
+
+            @Override
+            public void remove() {
+            	throw new UnsupportedOperationException();
+            }
+        };
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		return map.remove(o) != null;
+		Boolean ret = map.remove(o);
+		return ret != null && ret;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
-		return false;
+		for (Object o : c)
+            remove(o);
+		return true;
 	}
 
 	@Override
@@ -61,19 +87,16 @@ public class ConcurrentHashSet<T> implements Set<T> {
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return map.size();
 	}
 
 	@Override
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 }

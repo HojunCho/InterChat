@@ -9,6 +9,10 @@
 <title>Room List</title>
 </head>
 <body>
+	<header>
+		<h1>Select Room</h1>
+		<input type="button" value="Logout" onclick="location.href='logout'">
+	</header>
 	<div id="roomlist">
 		<c:forEach items = "${room_list}" var="room">
 			<div class="room" OnClick="location.href='room?roomid=${room.id}'">

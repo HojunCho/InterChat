@@ -4,12 +4,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Login view</title>
+	<title>Login InterChat</title>
 	<link rel="stylesheet" href= "resources/css/login.css" type="text/css">
 </head>
 <body>
-	<h1>Chatting Name</h1>
 	<div>
+		<h2>Chatting Name</h2>
 		<form method = "POST" action = "/interchat/login"> 
     	<label for="fname">Name</label>
     	<input type="text" id="fname" name="user_name" placeholder="Your name..">  

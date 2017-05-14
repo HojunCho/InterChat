@@ -1,7 +1,6 @@
 package com.network_project.interchat.other;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +18,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.network_project.interchat.VO.InteractInterface;
 import com.network_project.interchat.service.GeneralService;
+import com.network_project.interchat.util.ConcurrentHashSet;
 
 @Configurable(value="view")
 public abstract class View {
@@ -42,7 +42,7 @@ public abstract class View {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	private Set<WebSocketSession> sessions = new HashSet<WebSocketSession>();
+	private Set<WebSocketSession> sessions = new ConcurrentHashSet<WebSocketSession>();
 	
 	protected View(ChatRoom parent, String view_name) {
 		logger.info("Creating View {}, \"{}\"", view_id, view_name);

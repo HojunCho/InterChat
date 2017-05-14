@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=0"> 
-	<title>InterChat</title>
+	<title>${room_name}</title>
 	<script> 
 		var room_id = "${roomid}";
 		var user_code = "${sessionScope.user_code}";
@@ -27,7 +27,7 @@
 			<div id="div_chat_content">
 			</div>
 			<div id="div_chat_input">
-				<textarea id="chat_cnt"></textarea>
+				<textarea id="chat_cnt" onkeypress="enterpress(event)"></textarea>
 				<button id="chat_btn" type="button" onclick="sendChat()">Chat</button>
 			</div>
 		</div>
