@@ -1,6 +1,5 @@
 package com.network_project.interchat.websocket;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -10,11 +9,16 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.network_project.interchat.VO.InitWebSocketObject;
 import com.network_project.interchat.VO.InteractInterface;
 import com.network_project.interchat.service.GeneralService;
+import com.network_project.interchat.util.ConcurrentHashSet;
 
 public abstract class ViewWebSocketHandler extends TextWebSocketHandler {
-	private Set<WebSocketSession> uninitialized = new HashSet<WebSocketSession>();	
+	private Set<WebSocketSession> uninitialized = new ConcurrentHashSet<WebSocketSession>(); 
+	
+	private ObjectMapper mapper = new ObjectMapper();
 
 	@Resource(name="GeneralService")
 	protected GeneralService general_service;
@@ -37,10 +41,10 @@ public abstract class ViewWebSocketHandler extends TextWebSocketHandler {
 		super.handleMessage(session, message);
 		if (((String) message.getPayload()).compareTo("NULL") == 0)
 			return;
-		if (uninitialized.contains(session)) {
-			if (!general_service.sessionIn(session, (String) message.getPayload()))
+		if (uninitialized.remove(session)) {
+			InitWebSocketObject init_obj = mapper.readValue((String) message.getPayload(), InitWebSocketObject.class);
+			if (general_service.getUserName(init_obj.getUserid()) == null || !general_service.sessionIn(session, init_obj.getViewid(), init_obj.getUserid()))
 				session.close(CloseStatus.BAD_DATA);
-			uninitialized.remove(session);
 		}
 		else
 		{

@@ -1,13 +1,11 @@
 package com.network_project.interchat.service;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PreDestroy;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -17,17 +15,13 @@ import com.network_project.interchat.other.ViewRunnableWork;
 
 @Service ("GeneralService")
 public final class GeneralServiceImpl implements GeneralService {
-	private static final Logger logger = LoggerFactory.getLogger(GeneralServiceImpl.class);
-	private Map<String, String> user_map = new HashMap<String, String>();
+	private Map<String, String> user_code2id = new ConcurrentHashMap<String, String>();
+	private Map<WebSocketSession, String> user_session2code = new ConcurrentHashMap<WebSocketSession, String>(); 
 	
 	@PreDestroy
 	private void destroyer() {
 		ViewRunnableWork.shutdown();
-	}
-
-	@Override
-	public String getUserName(String user_code) {
-		return user_map.get(user_code);
+		ChatRoom.disableAllRoom();
 	}
 
 	@Override
@@ -36,10 +30,26 @@ public final class GeneralServiceImpl implements GeneralService {
 	}
 	
 	@Override
+	public String getUserCode(WebSocketSession session) {
+		return user_session2code.get(session);
+	}
+	
+	@Override
+	public String getUserName(String user_code) {
+		return user_code2id.get(user_code);
+	}
+
+	@Override
+	public String getUserName(WebSocketSession session) {
+		return user_code2id.get(getUserCode(session));
+	}
+
+	
+	@Override
 	public boolean insertUserName(String user_name) {
-		if (user_map.containsKey(String.valueOf(user_name.hashCode())))
+		if (user_name.compareTo("Admin") == 0)
 			return false;
-		user_map.put(String.valueOf(user_name.hashCode()), user_name);
+		user_code2id.put(String.valueOf(user_name.hashCode()), user_name);
 		return true;
 	}
 	
@@ -55,12 +65,13 @@ public final class GeneralServiceImpl implements GeneralService {
 	}
 	
 	
-	private Map<WebSocketSession, String> session_map = new HashMap<WebSocketSession, String>();
+	private Map<WebSocketSession, String> session_map = new ConcurrentHashMap<WebSocketSession, String>();
 	
 	@Override
-	public boolean sessionIn(WebSocketSession session, String view_id) {
+	public boolean sessionIn(WebSocketSession session, String view_id, String user_id) {
 		if (View.getViewByID(view_id) == null)
 			return false;
+		user_session2code.put(session, user_id);
 		session_map.put(session, view_id);
 		View.getViewByID(view_id).sessionIn(session);
 		return true;
@@ -68,10 +79,7 @@ public final class GeneralServiceImpl implements GeneralService {
 
 	@Override
 	public void sessionOut(WebSocketSession session) {
-		if (session_map.get(session) == null)
-			logger.error("AAAA");
-		View.getViewByID(session_map.get(session)).sessionOut(session);
-		session_map.remove(session);
+		View.getViewByID(session_map.remove(session)).sessionOut(session);
 	}
 
 	@Override

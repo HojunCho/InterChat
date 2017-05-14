@@ -40,7 +40,7 @@ public abstract class ViewRunnableWork implements Runnable {
 	private static ViewExecutor executor = new ViewExecutor(Math.min(Math.max(Runtime.getRuntime().availableProcessors()/2, 1), 16));
 	
 	public static void shutdown() {
-		executor.shutdown();
+		executor.shutdownNow();
 	}
 	
 	private AtomicInteger state = new AtomicInteger(Status.IDLE.getValue());

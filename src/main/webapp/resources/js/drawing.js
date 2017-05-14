@@ -12,7 +12,7 @@ var lineWidth = 2;
 var scale = 1.0;
 var initImg;
 
-var wsDrawingUri = "ws://" + server_ip + ":" + server_port + "/interchat/websocket/drawing.do";
+var wsDrawingUri = "ws://" + location.host + "/interchat/websocket/drawing.do";
 var drawing_websocket;
 
 window.onload = function() {
@@ -45,7 +45,7 @@ window.onload = function() {
 	
 	initImg = new Image();
 	initImg.onload = initWebSocket;
-	initImg.src = "/interchat/image?viewid=" + view_id;	
+	initImg.src = "image?viewid=" + view_id;	
 }
 
 function initWebSocket() {
@@ -58,13 +58,13 @@ function initWebSocket() {
 	drawing_websocket = new WebSocket (wsDrawingUri);
 
 	drawing_websocket.onopen = function (evt) {
+		drawing_websocket.send(JSON.stringify({userid : user_code, viewid : view_id}));
 		drawing_websocket.onmessage = function (evt) {	
 			var data = JSON.parse(evt.data);
 			for(var i = 0; i < data.length; i++) {
 				draw(data[i].prevX, data[i].prevY, data[i].currX, data[i].currY, data[i].color, data[i].lineWidth);
 			}
 		}
-		drawing_websocket.send(view_id);
 	}
 	setInterval(drawingHeartBeat, 9000);
 }

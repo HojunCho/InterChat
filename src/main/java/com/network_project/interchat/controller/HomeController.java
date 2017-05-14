@@ -3,13 +3,17 @@ package com.network_project.interchat.controller;
 import java.io.ByteArrayOutputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
+import com.network_project.interchat.VO.LoginObject;
 import com.network_project.interchat.other.ChatRoom;
 import com.network_project.interchat.other.DrawingView;
 import com.network_project.interchat.other.View;
@@ -35,10 +42,13 @@ import com.network_project.interchat.service.GeneralService;
 public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
+	@ResponseStatus(value=HttpStatus.NOT_FOUND)  // 404
+	public class NotFoundException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+	}	
+
 	@Resource(name="GeneralService")
 	private GeneralService general_service;
-	
-	private static int user_num = 0;
 	
 	@PostConstruct
 	public void constructor() {
@@ -51,32 +61,63 @@ public class HomeController {
 		}
 	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model) {
+	@RequestMapping(value ="/", method = RequestMethod.GET)
+	public ModelAndView login(HttpServletRequest requset) {
+		if (requset.getSession().getAttribute("user_code") != null)
+			return new ModelAndView(new RedirectView("roomlist"));
+		return new ModelAndView("login","command",new LoginObject());
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String home(Model model, HttpSession session, HttpServletRequest request) {
+		String new_user_name = request.getParameter("user_name");
+ 		if (new_user_name != null && general_service.insertUserName(new_user_name))
+ 			session.setAttribute("user_code", general_service.getUserCode(new_user_name));
+		else
+			return "redirect:/";
+		return "redirect:/roomlist";
+	}
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(Model model, HttpSession session) {
+		session.setAttribute("user_code", null);
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value= "/roomlist", method = RequestMethod.GET)
+	public String getRoomList(Model model, HttpServletRequest request) {
 		Set<ChatRoom> room_list = general_service.getRoomList();
-		if (room_list.size() == 0) {
-			ChatRoom room = general_service.roomFactory("Inter Chat");
-			DrawingView drawing_view = new DrawingView(room, "Drawing");
-			room.addView(drawing_view);
-			model.addAttribute("room_id", room.getID());
+		List<Map<String, String>> parameters = new ArrayList<Map<String, String>>() ;
+		for(ChatRoom room : room_list) {
+			Map<String, String> parameter = new HashMap<String, String>();
+			parameter.put("id", room.getID());
+			parameter.put("name", room.getName());
+			parameters.add(parameter);
 		}
-		else
-			model.addAttribute("room_id", room_list.iterator().next().getID());
-		
-		String new_user_name = "³¸¼± »ç¶÷" + Integer.toString(user_num++);
-		if (general_service.insertUserName(new_user_name))
-			model.addAttribute("user_code", general_service.getUserCode(new_user_name));
-		else
-			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
-		
-		return "beta";
+		model.addAttribute("room_list", parameters);
+		return "roomlist";
+	}
+	
+	@RequestMapping(value = "/newroom", method = RequestMethod.GET)
+	public ModelAndView newroom(Model model, HttpServletRequest request) {
+		return new ModelAndView("newroom","command",new LoginObject());
+	}
+	
+	@RequestMapping(value = "/makeroom", method = RequestMethod.POST)
+	public String makeRoom(Model model, HttpServletRequest request) {
+		ChatRoom room = general_service.roomFactory(request.getParameter("room_name"));
+		DrawingView drawing_view = new DrawingView(room, "Drawing");
+		room.addView(drawing_view);
+		model.addAttribute("roomid", room.getID());		
+		return "redirect:/room";
 	}
 
 	@RequestMapping(value = "/room", method = RequestMethod.GET)
-	public String getRoom(Model model, @RequestParam("roomid") String room_id) {
+	public String getRoom(Model model, HttpServletRequest request, @RequestParam("roomid") String room_id) {
 		View view = general_service.getView(room_id);
 		if (view != null && view instanceof ChatRoom) {
-			model.addAttribute("room_id", room_id);
+			model.addAttribute("room_name", view.getName());
+			model.addAttribute("roomid", room_id);
 			List<View> view_list= ((ChatRoom)view).getViewList();
 			List<String> view_id_list = new ArrayList<String>();
 			for (ListIterator<View> view_iter = view_list.listIterator(1); view_iter.hasNext();) 
@@ -85,18 +126,20 @@ public class HomeController {
 			return "chat";
 		}
 		else
-			return "redirect:/";
+			return "redirect:/roomlist";
 	}
 	
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public String getView(Model model, @RequestParam("viewid") String view_id) {
 		model.addAttribute("view_id", view_id);
-		
 		View view = general_service.getView(view_id);
 		if (view != null && view instanceof DrawingView)
+		{
+			model.addAttribute("view_name", view.getName());
 			return "drawing";
+		}
 		else
-			return "redirect:/";
+			throw new NotFoundException();
 	}
 	
 	@ResponseBody
@@ -104,7 +147,10 @@ public class HomeController {
 	public byte[] getImage(@RequestParam("viewid") String view_id) {
 		try {
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			ImageIO.write(((DrawingView) general_service.getView(view_id)).getImage(), "png", stream);
+			if (general_service.getView(view_id) instanceof DrawingView)
+				ImageIO.write(((DrawingView) general_service.getView(view_id)).getImage(), "png", stream);
+			else if (general_service.getView(view_id) instanceof ChatRoom)
+				ImageIO.write(((ChatRoom) general_service.getView(view_id)).getThumbnail(), "png", stream);
 			stream.flush();
 			byte[] imageBytes =stream.toByteArray();
 			stream.close();
@@ -113,21 +159,6 @@ public class HomeController {
 		catch (Exception e) {
 			return new byte[0];
 		}
-	}
-	
-	@RequestMapping(value = "/beta/new", method = RequestMethod.GET)
-	public String newRoom(Model model) {
-		ChatRoom room = general_service.roomFactory("Inter Chat");
-		DrawingView drawing_view = new DrawingView(room, "Drawing");
-		room.addView(drawing_view);
-		model.addAttribute("room_id", room.getID());
-		
-		String new_user_name = "³¸¼± »ç¶÷" + Integer.toString(user_num++);
-		if (general_service.insertUserName(new_user_name))
-			model.addAttribute("user_code", general_service.getUserCode(new_user_name));
-		else
-			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
-		
-		return "beta";
-	}
+	}	
 }
+ 
