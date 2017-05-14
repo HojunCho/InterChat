@@ -68,11 +68,6 @@ public class HomeController {
 		return new ModelAndView("login","command",new LoginObject());
 	}
 
-	@RequestMapping(value = "/newroom", method = RequestMethod.GET)
-	public ModelAndView newroom(Model model, HttpServletRequest request) {
-		return new ModelAndView("newroom","command",new LoginObject());
-	}
-	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String home(Model model, HttpSession session, HttpServletRequest request) {
 		String new_user_name = request.getParameter("user_name");
@@ -101,6 +96,11 @@ public class HomeController {
 		}
 		model.addAttribute("room_list", parameters);
 		return "roomlist";
+	}
+	
+	@RequestMapping(value = "/newroom", method = RequestMethod.GET)
+	public ModelAndView newroom(Model model, HttpServletRequest request) {
+		return new ModelAndView("newroom","command",new LoginObject());
 	}
 	
 	@RequestMapping(value = "/makeroom", method = RequestMethod.POST)

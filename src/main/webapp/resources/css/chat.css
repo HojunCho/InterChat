@@ -78,9 +78,7 @@ body {
 	height: calc(100% - 3rem);
 	border-style: solid;
 	border-width: 1px;
-	overflow-y: auto;
-	/* auto => child/  */
-	/* 100% => parent_size */
+	overflow-y:scroll;
 }
 
 #div_chat_input {

@@ -37,7 +37,7 @@ div {
 }
 </style>
 <body>
-	<h1 class="aav">Chatting Name</h1>
+	<h1>Chatting Name</h1>
 	<div>
 		<form method = "POST" action = "/interchat/login"> 
     	<label for="fname">Name</label>

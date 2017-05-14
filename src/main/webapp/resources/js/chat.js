@@ -36,9 +36,22 @@ function receiveChat(chat) {
 	else
 		chat_window.innerHTML += chat.user + " : " + chat.content;
 	chat_window.innerHTML += "<br/>";
+
+	chat_window.scrollTop = chat_window.scrollHeight;
+}
+
+function enterpress(e) {
+	if (e.keyCode === 13)
+	{
+		e.preventDefault(); 
+		sendChat();
+	}
 }
 
 function sendChat() {
+	if (chat_input.value == "")
+		return;
+
 	var chat = {"user" : user_code, "content" : chat_input.value};
 	chat_input.value = "";
 	chat_websocket.send(JSON.stringify(chat));

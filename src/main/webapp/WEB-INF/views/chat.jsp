@@ -27,7 +27,7 @@
 			<div id="div_chat_content">
 			</div>
 			<div id="div_chat_input">
-				<textarea id="chat_cnt"></textarea>
+				<textarea id="chat_cnt" onkeypress="enterpress(event)"></textarea>
 				<button id="chat_btn" type="button" onclick="sendChat()">Chat</button>
 			</div>
 		</div>

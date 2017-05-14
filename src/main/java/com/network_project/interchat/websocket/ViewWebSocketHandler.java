@@ -1,6 +1,6 @@
 package com.network_project.interchat.websocket;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -13,9 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.network_project.interchat.VO.InitWebSocketObject;
 import com.network_project.interchat.VO.InteractInterface;
 import com.network_project.interchat.service.GeneralService;
+import com.network_project.interchat.util.ConcurrentHashSet;
 
 public abstract class ViewWebSocketHandler extends TextWebSocketHandler {
-	private ConcurrentHashMap<WebSocketSession, Object> uninitialized = new ConcurrentHashMap<WebSocketSession, Object>(); 
+	private Set<WebSocketSession> uninitialized = new ConcurrentHashSet<WebSocketSession>(); 
 	
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -25,13 +26,13 @@ public abstract class ViewWebSocketHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		super.afterConnectionEstablished(session);
-		uninitialized.put(session, new Object());
+		uninitialized.add(session);
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		super.afterConnectionClosed(session, status);
-		if (uninitialized.remove(session) == null)
+		if (!uninitialized.remove(session))
 			general_service.sessionOut(session);
 	}
 
@@ -40,7 +41,7 @@ public abstract class ViewWebSocketHandler extends TextWebSocketHandler {
 		super.handleMessage(session, message);
 		if (((String) message.getPayload()).compareTo("NULL") == 0)
 			return;
-		if (uninitialized.remove(session) != null) {
+		if (uninitialized.remove(session)) {
 			InitWebSocketObject init_obj = mapper.readValue((String) message.getPayload(), InitWebSocketObject.class);
 			if (general_service.getUserName(init_obj.getUserid()) == null || !general_service.sessionIn(session, init_obj.getViewid(), init_obj.getUserid()))
 				session.close(CloseStatus.BAD_DATA);

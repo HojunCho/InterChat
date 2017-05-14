@@ -39,7 +39,7 @@ div {
 }
 </style>
 <body>
-	<h1 class="abc">Chatting-room Name</h1>
+	<h1>Chatting-room Name</h1>
 	<div>
 		<form method = "POST" action = "/interchat/makeroom"> 
     	<label for="room-name">Name</label>
