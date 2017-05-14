@@ -14,7 +14,7 @@ public class HomeInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 		try {
 			if(request.getSession().getAttribute("user_code") == null) {
-				response.sendRedirect("/");
+				response.sendRedirect("/interchat/");
 				return false;
 			}
 		} catch (Exception e) {
