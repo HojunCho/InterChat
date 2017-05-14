@@ -6,6 +6,9 @@ public class LineObject implements InteractInterface {
 	private int currX;
 	private int currY;
 	
+	private String color;
+	private int lineWidth;
+	
 	public int getPrevX() {
 		return prevX;
 	}
@@ -37,4 +40,19 @@ public class LineObject implements InteractInterface {
 	public void setCurrY(int _currY) {
 		currY = _currY;
 	}
+	public String getColor() {
+		return color;
+	}
+	
+	public void setColor(String _color) {
+		color = _color;
+	}
+	public int getlineWidth() {
+		return lineWidth;
+	}
+	
+	public void setlineWidth(int _lineWidth) {
+		lineWidth = _lineWidth;
+	}
+	
 }

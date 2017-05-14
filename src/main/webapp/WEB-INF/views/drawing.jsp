@@ -14,6 +14,15 @@
 	<link rel="stylesheet" href="resources/css/drawing.css" type="text/css">
 </head>
 <body>
+	<button class="button button1" id="black_button">Black</button>
+	<button class="button button2" id="red_button">Red</button>
+	<button class="button button3" id="blue_button">Blue</button>
+	<button class="button button4" id="eraser_button">Eraser</button>
+	<button class="button button5" id="lineWidth_incre">+</button>
+	<button class="button button5" id="lineWidth_decre">-</button>
+
+	<br/>	
+
 	<canvas id="canvas" width="800" height="600">
 	Your browser does not support the HTML5 canvas tag.
 	</canvas>
