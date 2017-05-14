@@ -116,6 +116,7 @@ public class HomeController {
 	public String getRoom(Model model, HttpServletRequest request, @RequestParam("roomid") String room_id) {
 		View view = general_service.getView(room_id);
 		if (view != null && view instanceof ChatRoom) {
+			model.addAttribute("room_name", view.getName());
 			model.addAttribute("roomid", room_id);
 			List<View> view_list= ((ChatRoom)view).getViewList();
 			List<String> view_id_list = new ArrayList<String>();
@@ -133,7 +134,10 @@ public class HomeController {
 		model.addAttribute("view_id", view_id);
 		View view = general_service.getView(view_id);
 		if (view != null && view instanceof DrawingView)
+		{
+			model.addAttribute("view_name", view.getName());
 			return "drawing";
+		}
 		else
 			throw new NotFoundException();
 	}
