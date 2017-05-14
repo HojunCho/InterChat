@@ -2,7 +2,9 @@ package com.network_project.interchat.other;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,6 +35,8 @@ public class ChatRoom extends View {
 	private List<View> views = new ArrayList<View>();
 	private AtomicInteger left_view = new AtomicInteger();
 	private AtomicReference<Timer> timer = new AtomicReference<Timer>(null);
+	
+	private Queue<InteractInterface> recent_chats = new LinkedList<InteractInterface>();
 	
 	public ChatRoom(String name) {
 		super(null, name);
@@ -87,18 +91,30 @@ public class ChatRoom extends View {
 	
 	@Override
 	public void interact(WebSocketSession session, InteractInterface obj) {
-		send(obj);
+		sendChat((ChatObject) obj);
 	}
 	
 	@Override
 	public void sessionIn(WebSocketSession session) {
 		super.sessionIn(session);
+		
+		List<InteractInterface> chats;
+		synchronized (recent_chats) {
+			chats = new ArrayList<InteractInterface>(recent_chats);
+		}
+		
+		if (chats.size() > 0) {
+			for (InteractInterface chat : chats)
+				sendTo(session, chat);
+		}
+		
 		ChatObject chat = new ChatObject();
 		chat.setUser("Admin");
 		if (general_service == null)
 			System.out.println("BAD");
 		chat.setContent(general_service.getUserName(session) + "님이 들어왔습니다.");
-		send(chat);
+		
+		sendChat(chat);
 	}
 	
 	@Override
@@ -107,7 +123,17 @@ public class ChatRoom extends View {
 		ChatObject chat = new ChatObject();
 		chat.setUser("Admin");
 		chat.setContent(general_service.getUserName(session) + "님이 나갔습니다.");
-		send(chat);
+		
+		sendChat(chat);
+	}
+	
+	private void sendChat(ChatObject chat) {
+		synchronized (recent_chats) {
+			while(recent_chats.size() >= 100)
+				recent_chats.poll();
+			recent_chats.add(chat);
+			send(chat);
+		}
 	}
 	
 	private class RoomChecker extends TimerTask {
