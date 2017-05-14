@@ -5,7 +5,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
-	sessionStorage.user_code = "${user_code}";
 	document.location.href='/interchat/room?roomid=${room_id}'; 
 </script>
 <title>Beta Page</title>

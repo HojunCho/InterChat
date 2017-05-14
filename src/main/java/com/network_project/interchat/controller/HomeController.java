@@ -62,15 +62,20 @@ public class HomeController {
 	public ModelAndView login() {
 		return new ModelAndView("login","command",new LoginObject());
 	}
-	/*
-	public String LoginView(Locale locale, Model model){
-		model.addAttribute("server_ip","localhost");
-		return "login";
+
+	@RequestMapping(value = "/afterlogin",method = RequestMethod.POST)
+	public ModelAndView newroom(Model model, HttpServletRequest request) {
+		String new_user_name = request.getParameter("user_name");
+ 		if (general_service.insertUserName(new_user_name))
+			model.addAttribute("user_code", general_service.getUserCode(new_user_name));
+		else
+			throw new NotFoundException();
+
+		return new ModelAndView("afterlogin","command",new LoginObject());
 	}
-	*/
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String home(Model model,HttpServletRequest request) {
+	public String home(Model model, HttpServletRequest request) {
 		Set<ChatRoom> room_list = general_service.getRoomList();
 		if (room_list.size() == 0) {
 			ChatRoom room = general_service.roomFactory("Inter Chat");
@@ -79,13 +84,6 @@ public class HomeController {
 			model.addAttribute("room_id", room.getID());
 		}
 			model.addAttribute("room_id", room_list.iterator().next().getID());
-		
-		String new_user_name = request.getParameter("user_name");
- 		if (general_service.insertUserName(new_user_name))
-			model.addAttribute("user_code", general_service.getUserCode(new_user_name));
-		else
-			throw new NotFoundException();
-		
 		return "beta";
 	}
 
@@ -108,7 +106,6 @@ public class HomeController {
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public String getView(Model model, @RequestParam("viewid") String view_id) {
 		model.addAttribute("view_id", view_id);
-		
 		View view = general_service.getView(view_id);
 		if (view != null && view instanceof DrawingView)
 			return "drawing";
@@ -148,3 +145,4 @@ public class HomeController {
 		return "beta";
 	}
 }
+ 
