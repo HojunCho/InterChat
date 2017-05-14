@@ -22,6 +22,7 @@ window.onload = function() {
 	}
 	chat_websocket.onerror = function (evt) {
 		chat_window.innerHTML += "Connection error. Please refresh the page. <br />";
+
 	}
 	chat_websocket.onclose = function (evt) {
 		chat_window.innerHTML += "Connection closed. Please refresh the page. <br />";

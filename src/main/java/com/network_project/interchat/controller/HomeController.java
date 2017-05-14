@@ -67,7 +67,12 @@ public class HomeController {
 			return new ModelAndView(new RedirectView("roomlist"));
 		return new ModelAndView("login","command",new LoginObject());
 	}
-		
+
+	@RequestMapping(value = "/newroom",method = RequestMethod.POST)
+	public ModelAndView newroom(Model model, HttpServletRequest request) {
+		return new ModelAndView("newroom","command",new LoginObject());
+	}
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String home(Model model, HttpSession session, HttpServletRequest request) {
 		String new_user_name = request.getParameter("user_name");
@@ -75,8 +80,6 @@ public class HomeController {
  			session.setAttribute("user_code", general_service.getUserCode(new_user_name));
 		else
 			return "redirect:/";
-
-		
 		return "redirect:/roomlist";
 	}
 	
@@ -119,7 +122,6 @@ public class HomeController {
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public String getView(Model model, @RequestParam("viewid") String view_id) {
 		model.addAttribute("view_id", view_id);
-		
 		View view = general_service.getView(view_id);
 		if (view != null && view instanceof DrawingView)
 			return "drawing";
@@ -156,3 +158,4 @@ public class HomeController {
 		return "redirect:/room";
 	}
 }
+ 

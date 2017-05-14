@@ -1,11 +1,11 @@
 package com.network_project.interchat.other;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Resource;
@@ -22,7 +22,7 @@ import com.network_project.interchat.service.GeneralService;
 
 @Configurable(value="view")
 public abstract class View {
-	private static Map<String, View> view_id_map = new HashMap<String, View>();
+	private static Map<String, View> view_id_map = new ConcurrentHashMap<String, View>();
 	private static AtomicInteger view_count = new AtomicInteger(0);
 
 	private static String getNewViewID () {

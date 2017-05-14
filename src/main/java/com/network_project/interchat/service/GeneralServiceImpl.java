@@ -1,8 +1,8 @@
 package com.network_project.interchat.service;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PreDestroy;
 
@@ -15,8 +15,8 @@ import com.network_project.interchat.other.ViewRunnableWork;
 
 @Service ("GeneralService")
 public final class GeneralServiceImpl implements GeneralService {
-	private Map<String, String> user_code2id = new HashMap<String, String>();
-	private Map<WebSocketSession, String> user_session2code = new HashMap<WebSocketSession, String>(); 
+	private Map<String, String> user_code2id = new ConcurrentHashMap<String, String>();
+	private Map<WebSocketSession, String> user_session2code = new ConcurrentHashMap<WebSocketSession, String>(); 
 	
 	@PreDestroy
 	private void destroyer() {
@@ -65,7 +65,7 @@ public final class GeneralServiceImpl implements GeneralService {
 	}
 	
 	
-	private Map<WebSocketSession, String> session_map = new HashMap<WebSocketSession, String>();
+	private Map<WebSocketSession, String> session_map = new ConcurrentHashMap<WebSocketSession, String>();
 	
 	@Override
 	public boolean sessionIn(WebSocketSession session, String view_id, String user_id) {
@@ -79,8 +79,7 @@ public final class GeneralServiceImpl implements GeneralService {
 
 	@Override
 	public void sessionOut(WebSocketSession session) {
-		View.getViewByID(session_map.get(session)).sessionOut(session);
-		session_map.remove(session);
+		View.getViewByID(session_map.remove(session)).sessionOut(session);
 	}
 
 	@Override
