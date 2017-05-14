@@ -10,15 +10,15 @@
 <title>Room List</title>
 </head>
 <body>
-	<header>
+	<div id="header">
 		<h1>Select Room</h1>
 		<input type="button" value="Logout" onclick="location.href='logout'">
-	</header>
+	</div>
 	<div id="roomlist">
 		<c:forEach items = "${room_list}" var="room">
 			<div class="room" OnClick="location.href='room?roomid=${room.id}'">
 				<label>${room.name}</label>
-				<img src="image?viewid=${room.id}" alt="${room.name}"/>
+				<img src="image?viewid=${room.id}&dummy=<%=(int) (Math.random()*100)%>" alt="${room.name}"/>
 			</div>
 		</c:forEach>
 		

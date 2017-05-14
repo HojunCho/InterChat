@@ -105,7 +105,10 @@ public class HomeController {
 	
 	@RequestMapping(value = "/makeroom", method = RequestMethod.POST)
 	public String makeRoom(Model model, HttpServletRequest request) {
-		ChatRoom room = general_service.roomFactory(request.getParameter("room_name"));
+		String new_room_name = request.getParameter("room_name");
+		if (new_room_name.compareTo("") == 0)
+			new_room_name = "Inter Chatting";
+		ChatRoom room = general_service.roomFactory(new_room_name);
 		DrawingView drawing_view = new DrawingView(room, "Drawing");
 		room.addView(drawing_view);
 		model.addAttribute("roomid", room.getID());		

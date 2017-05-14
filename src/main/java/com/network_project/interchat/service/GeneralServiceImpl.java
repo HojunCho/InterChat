@@ -47,7 +47,7 @@ public final class GeneralServiceImpl implements GeneralService {
 	
 	@Override
 	public boolean insertUserName(String user_name) {
-		if (user_name.compareTo("Admin") == 0)
+		if (user_name.compareTo("Admin") == 0 || user_name.compareTo("") == 0)
 			return false;
 		user_code2id.put(String.valueOf(user_name.hashCode()), user_name);
 		return true;
