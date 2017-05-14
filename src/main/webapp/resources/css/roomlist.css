@@ -1,5 +1,21 @@
 @CHARSET "UTF-8";
-
+h1{
+	margin: auto;
+	padding : 20px;
+}
+input[type=button] {
+	position : relatvie;
+	float : right;
+	background-color: #AAAAAA;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: 2px solid gray;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type=button]:hover{
+	background-color: #888888
+}
 .room {
 	background-color: #F0F0F0;
 	position :relatvie;
