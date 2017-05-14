@@ -16,11 +16,15 @@
 				<img src="image?viewid=${room.id}" alt="${room.name}"/>
 			</div>
 		</c:forEach>
-
+		<a target="_blank" OnClick="location.href='/interchat/newroom'">
+		<img src = "resources/image/addroombutton.png" alt="Add Room" style="width:150px">
+		</a>
+		<!--
 		<div class="room" OnClick="location.href='/interchat/newroom'">
 			<label>Make New Room!</label>
 			<img src="resources/image/addroombutton.png" alt="Add Room"/>
 		</div>
+		 -->
 	</div>
 </body>
 </html>
