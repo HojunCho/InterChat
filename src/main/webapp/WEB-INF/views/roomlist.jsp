@@ -17,7 +17,7 @@
 			</div>
 		</c:forEach>
 
-		<div class="room" OnClick="location.href='/interchat/beta/new'">
+		<div class="room" OnClick="location.href='/interchat/newroom'">
 			<label>Make New Room!</label>
 			<img src="resources/image/addroombutton.png" alt="Add Room"/>
 		</div>

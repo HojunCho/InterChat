@@ -61,14 +61,14 @@ public class HomeController {
 		}
 	}
 	
-	@RequestMapping(value ="/",method = RequestMethod.GET)
+	@RequestMapping(value ="/", method = RequestMethod.GET)
 	public ModelAndView login(HttpServletRequest requset) {
 		if (requset.getSession().getAttribute("user_code") != null)
 			return new ModelAndView(new RedirectView("roomlist"));
 		return new ModelAndView("login","command",new LoginObject());
 	}
 
-	@RequestMapping(value = "/newroom",method = RequestMethod.POST)
+	@RequestMapping(value = "/newroom", method = RequestMethod.GET)
 	public ModelAndView newroom(Model model, HttpServletRequest request) {
 		return new ModelAndView("newroom","command",new LoginObject());
 	}
@@ -101,6 +101,15 @@ public class HomeController {
 		}
 		model.addAttribute("room_list", parameters);
 		return "roomlist";
+	}
+	
+	@RequestMapping(value = "/makeroom", method = RequestMethod.POST)
+	public String makeRoom(Model model, HttpServletRequest request) {
+		ChatRoom room = general_service.roomFactory(request.getParameter("room_name"));
+		DrawingView drawing_view = new DrawingView(room, "Drawing");
+		room.addView(drawing_view);
+		model.addAttribute("roomid", room.getID());		
+		return "redirect:/room";
 	}
 
 	@RequestMapping(value = "/room", method = RequestMethod.GET)
@@ -146,16 +155,6 @@ public class HomeController {
 		catch (Exception e) {
 			return new byte[0];
 		}
-	}
-	
-	@RequestMapping(value = "/beta/new", method = RequestMethod.GET)
-	public String newRoom(Model model) {
-		ChatRoom room = general_service.roomFactory("Inter Chat");
-		DrawingView drawing_view = new DrawingView(room, "Drawing");
-		room.addView(drawing_view);
-		model.addAttribute("roomid", room.getID());	
-		
-		return "redirect:/room";
-	}
+	}	
 }
  
