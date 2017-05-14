@@ -18,16 +18,11 @@
 <body>
 	<div id="container">
 		<!-- Interacting Contents -->
-<<<<<<< HEAD
-		<iframe id="content" src="http://${server_ip}:8080/interchat/${content}"></iframe>
-		
-=======
 		<div id="content">
 			<c:forEach items = "${view_list}" var="view">
 				<iframe id="view_${view}" class="view" src="/interchat/view?viewid=${view}"></iframe>
 			</c:forEach>
 		</div>	
->>>>>>> refs/remotes/origin/background
 		<!-- Chat Box -->
 		<div id="div_chat_box">
 			<div id="div_chat_content">

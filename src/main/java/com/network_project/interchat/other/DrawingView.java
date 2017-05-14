@@ -57,10 +57,21 @@ public class DrawingView extends View {
 			
 			for (InteractInterface rawLine : lines) {
 				LineObject line = (LineObject)rawLine;
-				if (line.getPrevX() == line.getCurrX() && line.getPrevY() == line.getCurrY())
-					graphic.drawRect(line.getCurrX(), line.getCurrY(), 1, 1);
-				else
-					graphic.drawLine(line.getPrevX(), line.getPrevY(), line.getCurrX(), line.getCurrY());
+				String color = line.getColor();
+				int lineWidth = line.getlineWidth();
+				
+				if(color.equals("black"))
+					graphic.setColor(Color.BLACK);
+				else if(color.equals("red"))
+					graphic.setColor(Color.RED);
+				else if(color.equals("blue"))
+					graphic.setColor(Color.BLUE);
+				else if(color.equals("white"))
+					graphic.setColor(Color.WHITE);
+				
+				graphic.setStroke(new BasicStroke(lineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+				
+				graphic.drawLine(line.getPrevX(), line.getPrevY(), line.getCurrX(), line.getCurrY());
 			} 	
 			sendAll(lines);
 		}

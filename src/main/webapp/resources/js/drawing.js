@@ -61,7 +61,7 @@ function initWebSocket() {
 		drawing_websocket.onmessage = function (evt) {	
 			var data = JSON.parse(evt.data);
 			for(var i = 0; i < data.length; i++) {
-				draw(data[i].prevX, data[i].prevY, data[i].currX, data[i].currY, color, lineWidth);
+				draw(data[i].prevX, data[i].prevY, data[i].currX, data[i].currY, data[i].color, data[i].lineWidth);
 			}
 		}
 		drawing_websocket.send(view_id);
@@ -91,12 +91,14 @@ function resizeCanvas() {
 		scale = 1.0;
 }
 
-function sendDraw(prevX, prevY, currX, currY) {
+function sendDraw(prevX, prevY, currX, currY, color, lineWidth) {
 	var data = {};
 	data.prevX = prevX;
 	data.prevY = prevY;
 	data.currX = currX;
 	data.currY = currY;
+	data.color = color;
+	data.lineWidth = lineWidth;
 	drawing_websocket.send(JSON.stringify(data));
 }
 
@@ -108,7 +110,7 @@ function draw(prevX, prevY, currX, currY, color, lineWidth) {
 	if (prevX == currX && prevY == currY) {
 		ctx.beginPath();
         ctx.fillStyle = color;
-        ctx.fillRect(currX, currY, 2, 2);
+        ctx.fillRect(currX, currY, lineWidth, lineWidth);
         ctx.closePath();
 	}
 	else {
@@ -130,7 +132,7 @@ function mouseEvent(e_name, e) {
 		prevX = currX;
 		prevY = currY;
 		
-		sendDraw(prevX, prevY, currX, currY, color);
+		sendDraw(prevX, prevY, currX, currY, color, lineWidth);
 		drawing = true;
 	}
 	else if (e_name == "mousemove") {
@@ -140,7 +142,7 @@ function mouseEvent(e_name, e) {
 		prevY = currY;
 		currX = Math.round((e.clientX - canvas_rect.left) * scale);
 		currY = Math.round((e.clientY - canvas_rect.top) * scale);
-		sendDraw(prevX, prevY, currX, currY, color);
+		sendDraw(prevX, prevY, currX, currY, color, lineWidth);
 	}
 	else if (e_name == "mouseup" || e_name == "mouseleave") {
 		drawing = false;
