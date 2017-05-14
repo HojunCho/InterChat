@@ -65,7 +65,7 @@ public class DrawingView extends View {
 				else if(color.equals("white"))
 					graphic.setColor(Color.WHITE);
 				
-				graphic.setStroke(new BasicStroke(lineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+				graphic.setStroke(new BasicStroke(lineWidth - 0.3f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 				
 				graphic.drawLine(line.getPrevX(), line.getPrevY(), line.getCurrX(), line.getCurrY());
 			} 	

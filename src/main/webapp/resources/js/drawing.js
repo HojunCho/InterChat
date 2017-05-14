@@ -107,11 +107,12 @@ function drawingHeartBeat() {
 }
 
 function draw(prevX, prevY, currX, currY, color, lineWidth) {
-	if (prevX == currX && prevY == currY) {
+	if(prevX == currX && prevY == currY) {
 		ctx.beginPath();
-        ctx.fillStyle = color;
-        ctx.fillRect(currX, currY, lineWidth, lineWidth);
-        ctx.closePath();
+	    ctx.arc(currX, currY, lineWidth/2, 0, 2 * Math.PI);
+	    ctx.fillStyle = color;
+	    ctx.fill();
+	    ctx.closePath();
 	}
 	else {
 		ctx.beginPath();

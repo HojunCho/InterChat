@@ -46,7 +46,7 @@ canvas {
 	max-width: calc(100% - 10px);
 	max-height: calc(100% - 20px);
 	position: relative;
-	margin: 8px;
+	margin: 4px;
 	background-color: white;
     box-shadow: 5px 5px 8px #333333;
     display: none;
