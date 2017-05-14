@@ -12,9 +12,9 @@ body {
     left: 0;
     width: 100%;
     z-index: 100;
-	background-color: #F0F0F0;
+	background-color: #e0e0e0;
     border: none;
-    border-bottom: 2px solid #e0e0e0;
+    border-bottom: 2px solid #c0c0c0;
 }
 
 h1{
