@@ -27,16 +27,23 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<!-- Scan component in project -->
 	<context:component-scan base-package="com.network_project.interchat"/>
 
+	<!-- Set favicon -->
 	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
 
+	<!-- List of interceptors -->
 	<mvc:interceptors>
+		<!-- Server code checker -->
 		<mvc:interceptor>
+			<!-- Intercept path list -->
 			<mvc:mapping path="/**"/>
 			<beans:bean class="com.network_project.interchat.interceptor.ServerCodeInterceptor"/>
 		</mvc:interceptor>
+		<!-- Login checker -->
 		<mvc:interceptor> 
+			<!-- Intercept path list -->
 			<mvc:mapping path="/logout"/>
 			<mvc:mapping path="/roomlist"/>
 			<mvc:mapping path="/room"/>
@@ -47,18 +54,16 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
+	<!-- List of web socket handlers -->
 	<websocket:handlers>
 		<websocket:mapping path="/websocket/chat.do" handler="chatHandler"/>	
-	</websocket:handlers>	
-	
-	<beans:bean id="chatHandler" class="com.network_project.interchat.websocket.ChatHandler"/>
-	
-	<websocket:handlers>
 		<websocket:mapping path="/websocket/drawing.do" handler="drawingHandler"/>	
 	</websocket:handlers>	
 	
+	<beans:bean id="chatHandler" class="com.network_project.interchat.websocket.ChatHandler"/>
 	<beans:bean id="drawingHandler" name="drawingHandler" class="com.network_project.interchat.websocket.DrawingHandler"/>
 
+	<!-- Make View class managed by Spring Agent -->
 	<context:spring-configured />
     <context:load-time-weaver/>
 	<beans:bean id="view" class="com.network_project.interchat.other.View" abstract="true" scope="prototype"/>
