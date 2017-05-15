@@ -37,10 +37,12 @@
 			<beans:bean class="com.network_project.interchat.interceptor.ServerCodeInterceptor"/>
 		</mvc:interceptor>
 		<mvc:interceptor> 
+			<mvc:mapping path="/logout"/>
 			<mvc:mapping path="/roomlist"/>
 			<mvc:mapping path="/room"/>
 			<mvc:mapping path="/view"/>
-			<mvc:mapping path="/beta/new"/>
+			<mvc:mapping path="/newroom"/>
+			<mvc:mapping path="/image"/>
 			<beans:bean class="com.network_project.interchat.interceptor.HomeInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>

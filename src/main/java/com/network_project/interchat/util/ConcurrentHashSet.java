@@ -6,6 +6,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Concurrent한 Set을 지원하기 위해 제작한 Concurrent Hash Set.
+ * 내부적으로는 이미 존재하는 ConcurrentHashMap을 이용하였다.
+ * @param <T> 요소의 타입
+ */
 public class ConcurrentHashSet<T> implements Set<T> {
 	private Map<T, Boolean> map = new ConcurrentHashMap<T, Boolean>();
 

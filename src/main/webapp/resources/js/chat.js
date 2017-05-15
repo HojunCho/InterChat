@@ -2,7 +2,7 @@
  * 
  */
 
-var wsChatUri = "ws://" + location.host + "/interchat/websocket/chat.do";
+var wsChatUri = "ws://" + window.location.host + window.location.pathname + "/websocket/chat.do";
 var chat_websocket;
 var chat_window;
 var chat_input;

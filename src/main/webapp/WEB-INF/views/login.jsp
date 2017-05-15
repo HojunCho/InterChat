@@ -11,7 +11,7 @@
 <body>
 	<div>
 		<h2>Chatting Name</h2>
-		<form method = "POST" action = "/interchat/login"> 
+		<form method = "POST" action = "login"> 
     	<label for="fname">Name</label>
     	<input type="text" id="fname" name="user_name" placeholder="Your name..">  
     	<input type="submit" value="Submit">

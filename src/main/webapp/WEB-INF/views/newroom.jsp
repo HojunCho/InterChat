@@ -14,7 +14,7 @@
 <body>
 	<div>
 		<h2>Chatting-room Name</h2>
-		<form method = "POST" action = "/interchat/makeroom"> 
+		<form method = "POST" action = "makeroom"> 
     	<label for="room-name">Name</label>
     	<input type="text" id="room-name" name="room_name" placeholder="Room name..">  
     	<input type="submit" value="Submit">

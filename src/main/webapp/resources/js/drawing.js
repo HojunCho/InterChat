@@ -12,7 +12,7 @@ var lineWidth = 2;
 var scale = 1.0;
 var initImg;
 
-var wsDrawingUri = "ws://" + location.host + "/interchat/websocket/drawing.do";
+var wsDrawingUri = "ws://" + window.location.host + window.location.pathname + "/websocket/drawing.do";
 var drawing_websocket;
 
 window.onload = function() {
@@ -164,6 +164,4 @@ function buttonEvent(e_name, e) {
 		lineWidth += 2;
 	else if(e_name == "lineWidth_decre")
 		lineWidth -= 2;
-	
-	
 }
