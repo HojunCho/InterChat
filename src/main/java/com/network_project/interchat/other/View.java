@@ -90,6 +90,19 @@ public abstract class View {
 			parent.decreaseLiveView();
 	}
 	
+	final protected void send(InteractInterface obj) {
+		for (WebSocketSession session: this.sessions) {
+			if (!session.isOpen())
+				continue;
+			
+			try{
+				session.sendMessage(new TextMessage(mapper.writeValueAsString(obj)));
+			} catch (Exception ignored) {
+				this.logger.error("fail to send message!", ignored);
+			}
+		}
+	}
+
 	final protected void sendAll(List<InteractInterface> objs) {
 		for (WebSocketSession session: this.sessions) {
 			if (!session.isOpen())
@@ -103,17 +116,20 @@ public abstract class View {
 		}
 	}
 	
-	final protected void send(InteractInterface obj) {
-		for (WebSocketSession session: this.sessions) {
-			if (!session.isOpen())
-				continue;
-			
-			try{
-				session.sendMessage(new TextMessage(mapper.writeValueAsString(obj)));
-			} catch (Exception ignored) {
-				this.logger.error("fail to send message!", ignored);
-			}
+	final protected void sendTo(WebSocketSession session, InteractInterface obj) {
+		try{
+			session.sendMessage(new TextMessage(mapper.writeValueAsString(obj)));
+		} catch (Exception ignored) {
+			this.logger.error("fail to send message!", ignored);
 		}
+	}
+
+	final protected void sendToAll(WebSocketSession session, List<InteractInterface> objs) {
+		try{
+			session.sendMessage(new TextMessage(mapper.writeValueAsString(objs)));
+		} catch (Exception ignored) {
+			this.logger.error("fail to send message!", ignored);
+		}	
 	}
 	
 	public abstract void interact(WebSocketSession session, InteractInterface obj);

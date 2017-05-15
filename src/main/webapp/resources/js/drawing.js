@@ -49,7 +49,7 @@ window.onload = function() {
 	
 	initImg = new Image();
 	initImg.onload = initWebSocket;
-	initImg.src = "image?viewid=" + view_id;	
+	initImg.src = "image?viewid=" + view_id + "&dummy=" + Math.floor(Math.random() * 100);	
 }
 
 function initWebSocket() {
