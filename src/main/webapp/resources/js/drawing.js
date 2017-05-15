@@ -1,4 +1,4 @@
-/**
+/*
  * 서버에서 그림판 데이터의 교환을 담당하는 코드. 
  */
 
@@ -54,7 +54,7 @@ window.onload = function() {
 	canvas.addEventListener("touchleave", function(e) { mouseEvent("mouseleave", e.changedTouches[0]); });
 	
 	/*
-	 * 웹 소켓과 현재 캔버스를 해당 view_id와 짝짓는다
+	 * 해당 캔버스의 이미지를 불러온다.
 	 */
 	initImg = new Image();
 	initImg.onload = initWebSocket;
@@ -139,7 +139,7 @@ function drawingHeartBeat() {
 /*
  * sendDraw로 받은 정보를 이용해, 캔버스에 그림을 그리는 함수.
  * 점과 획으로 구분된다.
- * 점의 경우는 같은 좌표에 입력받은 색과 두께의 사각형을 그린다.
+ * 점의 경우는 같은 좌표에 입력받은 색과 두께의 원을 그린다.
  * 획의 경우에는 지나는 좌표들에 입력받은 색과 두께로 획을 그린다.
  */
 function draw(prevX, prevY, currX, currY, color, lineWidth) {
