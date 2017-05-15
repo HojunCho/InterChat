@@ -56,8 +56,8 @@
 
 	<!-- List of web socket handlers -->
 	<websocket:handlers>
-		<websocket:mapping path="/websocket/chat.do" handler="chatHandler"/>	
-		<websocket:mapping path="/websocket/drawing.do" handler="drawingHandler"/>	
+		<websocket:mapping path="/**/websocket/chat.do" handler="chatHandler"/>	
+		<websocket:mapping path="/**/websocket/drawing.do" handler="drawingHandler"/>	
 	</websocket:handlers>	
 	
 	<beans:bean id="chatHandler" class="com.network_project.interchat.websocket.ChatHandler"/>
