@@ -1,6 +1,7 @@
 package com.network_project.interchat.other;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -82,10 +83,12 @@ public abstract class View {
 		if (sessions.isEmpty())
 			parent.increaseLiveView();
 		sessions.add(session);
+		logger.info("View " + view_name + " - " + view_id + " Session In:" + session.getRemoteAddress() + " - " + session.getId());
 	}
 	
 	public void sessionOut(WebSocketSession session) {
 		sessions.remove(session);
+		logger.info("View " + view_name + " - " + view_id + " Session Out:" + session.getRemoteAddress() + " - " + session.getId());
 		if (sessions.isEmpty())
 			parent.decreaseLiveView();
 	}
@@ -110,7 +113,9 @@ public abstract class View {
 			
 			try{
 				session.sendMessage(new TextMessage(mapper.writeValueAsString(objs)));
-			} catch (Exception ignored) {
+			}
+			catch (SocketTimeoutException e) {} 
+			catch (Exception ignored) {
 				this.logger.error("fail to send message!", ignored);
 			}
 		}
@@ -119,7 +124,9 @@ public abstract class View {
 	final protected void sendTo(WebSocketSession session, InteractInterface obj) {
 		try{
 			session.sendMessage(new TextMessage(mapper.writeValueAsString(obj)));
-		} catch (Exception ignored) {
+		}
+		catch (SocketTimeoutException e) {}
+		catch (Exception ignored) {
 			this.logger.error("fail to send message!", ignored);
 		}
 	}

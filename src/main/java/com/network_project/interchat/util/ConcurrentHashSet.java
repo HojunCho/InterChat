@@ -95,6 +95,7 @@ public class ConcurrentHashSet<T> implements Set<T> {
 		throw new UnsupportedOperationException();
 	}
 
+	@SuppressWarnings("hiding")
 	@Override
 	public <T> T[] toArray(T[] a) {
 		throw new UnsupportedOperationException();

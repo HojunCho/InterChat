@@ -29,6 +29,8 @@
 	
 	<context:component-scan base-package="com.network_project.interchat"/>
 
+	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
+
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/>
