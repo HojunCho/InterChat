@@ -1,5 +1,5 @@
 /**
- * 
+ * 서버에서 그림판 데이터의 교환을 담당하는 코드. 
  */
 
 var black_button, red_button, blue_button, eraser_button, lineWidth_incre, lineWidth_decre;
@@ -15,6 +15,10 @@ var initImg;
 var wsDrawingUri = "ws://" + location.host + "/interchat/websocket/drawing.do";
 var drawing_websocket;
 
+/*
+ * 윈도우 창이 켜지면 실행되는 함수
+ * 그림판의 버튼틀을 통한 입력, 마우스의 움직임을 입력받는다.
+ * */
 window.onload = function() {
 	
 	black_button = document.getElementById("black_button");
