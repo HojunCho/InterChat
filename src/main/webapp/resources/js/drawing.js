@@ -31,12 +31,12 @@ window.onload = function() {
 	lineWidth_incre = document.getElementById("lineWidth_incre");
 	lineWidth_decre = document.getElementById("lineWidth_decre");
 
-	black_button.addEventListener("click", e => buttonEvent("black_button",e));
-	red_button.addEventListener("click", e => buttonEvent("red_button",e));
-	blue_button.addEventListener("click", e => buttonEvent("blue_button",e));
-	eraser_button.addEventListener("click", e => buttonEvent("eraser_button",e));
-	lineWidth_incre.addEventListener("click", e => buttonEvent("lineWidth_incre",e));
-	lineWidth_decre.addEventListener("click", e => buttonEvent("lineWidth_decre",e));
+	black_button.addEventListener("click", function(e) { buttonEvent("black_button",e); });
+	red_button.addEventListener("click", function(e) { buttonEvent("red_button",e); });
+	blue_button.addEventListener("click", function(e) { buttonEvent("blue_button",e); });
+	eraser_button.addEventListener("click", function(e) { buttonEvent("eraser_button",e); });
+	lineWidth_incre.addEventListener("click", function(e) { buttonEvent("lineWidth_incre",e); });
+	lineWidth_decre.addEventListener("click", function(e) { buttonEvent("lineWidth_decre",e); });
 	
 	/*
 	 * 캔버스 위의 마우스 움직임을 읽고 핸들러를 실행.
